@@ -88,7 +88,7 @@ def add_movie(request, category_name_slug):
     if category is None:
         return redirect('/rango/')
 
-    form = MovieForm(ategory)
+    form = MovieForm(category)
     if request.method == 'POST':
         form = MovieForm(request.POST)
 
@@ -105,7 +105,7 @@ def add_movie(request, category_name_slug):
             print(form.errors)
 
     context_dict = {'form': form, 'category': category}
-    return render(request, 'rango/add_page.html', context=context_dict)
+    return render(request, 'rango/add_movie.html', context=context_dict)
 
 
 # def register(request):

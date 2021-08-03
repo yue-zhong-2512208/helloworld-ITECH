@@ -68,6 +68,9 @@ instance/
 # Scrapy stuff:
 .scrapy
 
+# API key:
+.key
+
 # Sphinx documentation
 docs/_build/
 

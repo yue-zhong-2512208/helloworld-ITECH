@@ -5,8 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from rango.models import Category, Page
-from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from rango.models import Category, Movie
+from rango.forms import CategoryForm, MovieForm, UserForm, UserProfileForm
 
 
 def about(request):
@@ -19,11 +19,11 @@ def about(request):
 def index(request):
     # without '-' will sequence from the most to the least
     category_list = Category.objects.order_by('-likes')[:5]
-    page_list = Page.objects.order_by('-views')[:5]
+    movie_list = Movie.objects.order_by('-views')[:5]
     context_dict = {}
     context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
     context_dict['categories'] = category_list
-    context_dict['pages'] = page_list
+    context_dict['movies'] = movie_list
     visitor_cookie_handler(request)
     response = render(request, 'rango/index.html', context=context_dict)
     return response
@@ -55,12 +55,12 @@ def show_category(request, category_name_slug):
     context_dict = {}
     try:
         category = Category.objects.get(slug=category_name_slug)
-        pages = Page.objects.filter(category=category)
-        context_dict['pages'] = pages
+        movies = Movie.objects.filter(category=category)
+        context_dict['movies'] = movies
         context_dict['category'] = category
     except Category.DoesNotExist:
         context_dict['category'] = None
-        context_dict['pages'] = None
+        context_dict['movies'] = None
     return render(request, 'rango/category.html', context=context_dict)
 
 
@@ -79,7 +79,7 @@ def add_category(request):
 
 
 @login_required
-def add_page(request, category_name_slug):
+def add_movie(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
@@ -88,16 +88,16 @@ def add_page(request, category_name_slug):
     if category is None:
         return redirect('/rango/')
 
-    form = PageForm()
+    form = MovieForm(ategory)
     if request.method == 'POST':
-        form = PageForm(request.POST)
+        form = MovieForm(request.POST)
 
         if form.is_valid():
             if category:
-                page = form.save(commit=False)
-                page.category = category
-                page.views = 0
-                page.save()
+                movie = form.save(commit=False)
+                movie.category = category
+                movie.views = 0
+                movie.save()
                 return redirect(reverse('rango:show_category',
                                         kwargs={'category_name_slug':
                                                 category_name_slug}))

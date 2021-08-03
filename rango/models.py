@@ -22,7 +22,7 @@ class Category(models.Model):
         return self.name
 
 
-class Page(models.Model):
+class Movie(models.Model):
     TITLE_MAX_LENGTH = 128
     URL_MAX_LENGTH = 200
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

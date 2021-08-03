@@ -69,7 +69,7 @@ instance/
 .scrapy
 
 # API key:
-.key
+*.key
 
 # Sphinx documentation
 docs/_build/

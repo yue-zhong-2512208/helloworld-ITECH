@@ -48,4 +48,20 @@ def run_query(search_terms):
             'title': result['name'],
             'link': result['url'],
             'summary': result['snippet']})
+            
     return results
+
+def main():
+    # Alternative solution for terminal-based interaction. DM.
+    search_terms = input("Enter your query terms: ")
+    results = run_query(search_terms)
+
+    for result in results:
+        print(result['title'])
+        print(result['link'])
+        print(result['summary'])
+        print('===============')
+
+
+if __name__ == '__main__':
+    main()

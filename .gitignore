@@ -71,6 +71,9 @@ instance/
 # API key:
 *.key
 
+# migrations
+migrations/
+
 # Sphinx documentation
 docs/_build/
 

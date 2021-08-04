@@ -47,7 +47,7 @@
             </div>
         </div> {% endcomment %}
 
-        <div class="col-md-6">
+        {% comment %} <div class="col-md-6">
             <div class="card mb-6">
                 <div class="card-body">
                     <h2>Hot Movies</h2>
@@ -66,7 +66,69 @@
                     </p>
                 </div>
             </div>
+        </div> {% endcomment %}
+
+        {% comment %} {% if movies %}
+            <ul class="list-group">
+            {% for movie in movies %}
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <strong class="d-inline-block mb-2 text-success">movie category</strong>
+                            <h3 class="mb-0">{{movie.title}}</h3>
+                                <div class="mb-1 text-muted">movie likes</div>
+                                <p class="mb-auto">movie discription</p>
+                                <a href="#" class="stretched-link"><a href="{{ movie.url }}">Read More</a></a>
+                        </div>
+                        <div class="col-auto d-none d-lg-block">
+                            <svg class="bd-placeholder-img" width="182" height="268" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <title>{{movie.title}}</title>
+                            <rect width="100%" height="100%" fill="#55595c"/>
+                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no movies present.</strong>
+        {% endif %} {% endcomment %}
+
+        <div class="card-group">
+
+                {% if movies %}
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    
+                    {% for movie in movies %}
+                    <div class="col-sm-3 py-2">
+                    
+                        <div class="card shadow-sm">
+                            <svg class="bd-placeholder-img card-img-top" width="182" height="268" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c"/>
+                                <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                            </svg>
+
+                            <div class="card-body">
+                                <p class="card-text">{{ movie.title }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Likes: {{ movie.views }}</button>
+                                    </div>
+                                        <small class="text-muted"><a href="{{ movie.url }}">More</a></small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endfor %}
+                    
+                {% else %}
+                    <strong>There are no movies present.</strong>
+                {% endif %}
+
         </div>
+
     </div>
 </div>
 

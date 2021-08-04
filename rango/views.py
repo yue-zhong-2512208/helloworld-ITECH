@@ -21,7 +21,7 @@ def about(request):
 def index(request):
     # without '-' will sequence from the most to the least
     category_list = Category.objects.order_by('-likes')[:5]
-    movie_list = Movie.objects.order_by('-views')[:5]
+    movie_list = Movie.objects.order_by('-views')[:8]
     context_dict = {}
     context_dict['boldmessage'] = 'Enjoy your journey in the world of movies.'
     context_dict['categories'] = category_list

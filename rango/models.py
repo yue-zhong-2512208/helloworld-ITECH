@@ -28,10 +28,10 @@ class Movie(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=TITLE_MAX_LENGTH)
     url = models.URLField()
-    views = models.IntegerField(default=0)
+    movie_likes = models.IntegerField(default=0)
 
     def likeMovie(self):
-        self.views += 1
+        self.movie_likes += 1
         return
 
     def __str__(self):

@@ -21,7 +21,7 @@ def about(request):
 def index(request):
     # without '-' will sequence from the most to the least
     category_list = Category.objects.order_by('-likes')[:5]
-    movie_list = Movie.objects.order_by('-views')[:8]
+    movie_list = Movie.objects.order_by('-movie_likes')[:8]
     context_dict = {}
     context_dict['boldmessage'] = 'Enjoy your journey in the world of movies.'
     context_dict['categories'] = category_list
@@ -98,7 +98,7 @@ def add_movie(request, category_name_slug):
             if category:
                 movie = form.save(commit=False)
                 movie.category = category
-                movie.views = 0
+                movie.movie_likes = 0
                 movie.save()
                 return redirect(reverse('rango:show_category',
                                         kwargs={'category_name_slug':

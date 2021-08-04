@@ -9,11 +9,11 @@
 <div class="jumbotron p-4"> 
 {% comment %} the number after 'p-' can modify the space around the title {% endcomment %}
     <div class="container">
-        <h1 class="jumbotron-heading">Rango says...</h1>
+        <h1 class="jumbotron-heading">Welcome :)</h1>
         <div>
             <h2 class="h2">
                 {% if user.is_authenticated %}
-                    howdy {{ user.username }}!
+                    Hello! {{ user.username }}
                 {% else %}
                     hey there partner!
                 {% endif %}

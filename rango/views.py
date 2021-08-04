@@ -23,7 +23,7 @@ def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
     movie_list = Movie.objects.order_by('-views')[:5]
     context_dict = {}
-    context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
+    context_dict['boldmessage'] = 'Enjoy your journey in the world of movies.'
     context_dict['categories'] = category_list
     context_dict['movies'] = movie_list
     visitor_cookie_handler(request)

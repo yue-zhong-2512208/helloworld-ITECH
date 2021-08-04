@@ -1,4 +1,4 @@
-#weihan
+
 from datetime import datetime
 from rango.bing_search import run_query
 from django.contrib.auth.decorators import login_required
@@ -6,9 +6,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from rango.models import Category, Movie
-from rango.forms import CategoryForm, MovieForm, UserForm, UserProfileForm
-
+from rango.models import Category, Movie,User, Genre, Movie_rating,  Movie_hot
+from rango.forms import CategoryForm, MovieForm, CommentForm
+from django.contrib import messages
+from django.views.generic import  DetailView
 
 def about(request):
     context_dict = {}
@@ -201,3 +202,77 @@ def search(request):
             # Run our Bing function to get the results list!
             result_list = run_query(query)
     return render(request, 'rango/search.html', {'result_list': result_list})
+
+class MovieDetailView(DetailView):
+    '''电影详情页面'''
+    model = Movie
+    template_name = 'rango/detail.html'
+    # 上下文对象的名称
+    context_object_name = 'movie'
+
+    def get_context_data(self, **kwargs):
+        # 重写获取上下文方法，增加评分参数
+        context = super().get_context_data(**kwargs)
+        # 判断是否登录用
+        login = True
+        try:
+            user_id = self.request.session['user_id']
+        except KeyError as e:
+            login = False  # 未登录
+
+        # 获得电影的pk
+        pk = self.kwargs['pk']
+        movie = Movie.objects.get(pk=pk)
+
+        if login:
+            # 已经登录，获取当前用户的历史评分数据
+            user = User.objects.get(pk=user_id)
+
+            rating = Movie_rating.objects.filter(user=user, movie=movie).first()
+            # 默认值
+            score = 0
+            comment = ''
+            if rating:
+                score = rating.score
+                comment = rating.comment
+            context.update({'score': score, 'comment': comment})
+
+        # 判断是否登录，没有登录则不显示评分页面
+        context.update({'login': login})
+
+        return context
+
+    # 接受评分表单,pk是当前电影的数据库主键id
+    def post(self, request, pk):
+        url = request.get_full_path()
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            # 获取分数和评论
+            score = form.cleaned_data.get('score')
+            comment = form.cleaned_data.get('comment')
+            print(score, comment)
+            # 获取用户和电影
+            user_id = request.session['user_id']
+            user = User.objects.get(pk=user_id)
+            movie = Movie.objects.get(pk=pk)
+
+            # 更新一条记录
+            rating = Movie_rating.objects.filter(user=user, movie=movie).first()
+            if rating:
+                # 如果存在则更新
+                # print(rating)
+                rating.score = score
+                rating.comment = comment
+                rating.save()
+                # messages.info(request,"更新评分成功！")
+            else:
+                print('记录不存在')
+                # 如果不存在则添加
+                rating = Movie_rating(user=user, movie=movie, score=score, comment=comment)
+                rating.save()
+            messages.info(request, "评论成功!")
+
+        else:
+            # 表单没有验证通过
+            messages.info(request, "评分不能为空!")
+        return redirect(reverse('movie:detail', args=(pk,)))

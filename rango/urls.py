@@ -15,4 +15,6 @@ urlpatterns = [
     path('restricted/', views.restricted, name='restricted'),
 #     path('logout/', views.user_logout, name='logout'),
     path('search/', views.search, name='search'),
+    
+    path('detail/<int:pk>', views.MovieDetailView.as_view(), name='detail'),
 ]

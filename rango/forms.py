@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rango.models import UserProfile, Movie, Category
+from rango.models import UserProfile, Movie, Category, Movie_rating
 from django import forms
 
 
@@ -47,3 +47,19 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture',)
+
+
+class CommentForm(forms.ModelForm):
+    # 表单验证通过后再验证分数是否为0
+    def clean(self):
+        cleaned_data = super(CommentForm, self).clean()
+        score = cleaned_data.get('score')
+        if score == 0:
+            raise forms.ValidationError(message='评分不能为空！')
+        else:
+            return cleaned_data
+
+    class Meta:
+        # 电影评分，只记录评分和评论
+        model = Movie_rating
+        fields = ['score', 'comment']

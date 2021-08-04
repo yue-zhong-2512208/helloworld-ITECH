@@ -30,6 +30,10 @@ class Movie(models.Model):
     url = models.URLField()
     views = models.IntegerField(default=0)
 
+    def likeMovie(self):
+        self.views += 1
+        return
+
     def __str__(self):
         return self.title
 

@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rango.models import Category, Movie
 from rango.forms import CategoryForm, MovieForm, UserForm, UserProfileForm
+from django.contrib.auth.models import User
 
 
 def about(request):
@@ -89,7 +90,7 @@ def add_movie(request, category_name_slug):
     if category is None:
         return redirect('/rango/')
 
-    form = MovieForm(category)
+    form = MovieForm()
     if request.method == 'POST':
         form = MovieForm(request.POST)
 
@@ -108,6 +109,22 @@ def add_movie(request, category_name_slug):
     context_dict = {'form': form, 'category': category}
     return render(request, 'rango/add_movie.html', context=context_dict)
 
+
+# def add_movie(request):
+#     user = User.objects.get(username=request.user)
+#     form = MovieForm()
+
+#     if request.method == 'POST':
+#         form = MovieForm(request.POST)
+#         if form.is_valid():
+#             movie = form.save(commit=False)
+#             movie.user = user
+#             movie.save()
+
+#             return redirect('rango:index')
+#         else:
+#             print(form.errors)
+#     return render(request, 'rango/add_movie.html', {'form': form})
 
 # def register(request):
 #     registered = False

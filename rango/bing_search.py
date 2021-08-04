@@ -32,9 +32,9 @@ def run_query(search_terms):
     http://bit.ly/twd-bing-api
     """
     bing_key = read_bing_key()
-    search_url = 'https://api.bing.microsoft.com/v7.0/custom/search?'
+    search_url = 'https://api.bing.microsoft.com/v7.0/search'
     headers = {'Ocp-Apim-Subscription-Key': bing_key}
-    params = {'q': search_terms, 'textDecorations': True, 'textFormat': ' HTML'}
+    params = {'q': search_terms, 'textDecorations': True, 'textFormat': 'HTML'}
     
     # Issue the request, given the details above.
     response = requests.get(search_url, headers=headers, params=params)
@@ -44,10 +44,10 @@ def run_query(search_terms):
     # With the response now in play, build up a Python list.
     results = []
     for result in search_results['webPages']['value']:
-        results.append({
-            'title': result['name'],
-            'link': result['url'],
-            'summary': result['snippet']})
+         results.append({
+             'title': result['name'],
+             'link': result['url'],
+             'summary': result['snippet']})
             
     return results
 

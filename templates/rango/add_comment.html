@@ -1,0 +1,26 @@
+{% extends 'coffquiz/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {% if article %}
+        {{ article.title }}
+    {% else %}
+        Unknown Article
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+    <form id="add_comment_form" method="post" action="{% url 'coffquiz:add_comment' movie.slug %}">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        
+        {% for field in form.visible_fields %}
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field }}
+        {% endfor %}
+        <input type="submit" name="submit" value="Add Comment">
+    </form>
+{% endblock %}

@@ -11,12 +11,11 @@
 
 {% block body_block %}
     {% if category %}
-    <h1>{{ category.name }}</h1>
     {% if movies %}
     <ul>
         <div class="container">
             <div class="row">
-                
+                <h1>{{ category.name }} Movies</h1>
                 <div class="card-group">
 
                         {% if movies %}

@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from rango.models import Category, Movie
+from rango.models import Category, Movie, Comment
 from rango.forms import CategoryForm, MovieForm, UserForm, UserProfileForm
 from django.contrib.auth.models import User
 
@@ -57,7 +57,8 @@ def show_category(request, category_name_slug):
     context_dict = {}
     try:
         category = Category.objects.get(slug=category_name_slug)
-        movies = Movie.objects.filter(category=category)
+        movies = Movie.objects.filter(
+            category=category).order_by('-movie_likes')
         context_dict['movies'] = movies
         context_dict['category'] = category
     except Category.DoesNotExist:
@@ -65,6 +66,21 @@ def show_category(request, category_name_slug):
         context_dict['movies'] = None
     return render(request, 'rango/category.html', context=context_dict)
 
+
+def show_movie(request, movie_poster_slug):
+    context_dict = {}
+    try:
+        movie = Movie.objects.get(slug=movie_poster_slug)
+        comments = Comment.objects.filter(movie=movie)
+
+        context_dict['movie'] = movie
+        context_dict['comments'] = comments
+
+    except Category.DoesNotExist:
+        context_dict['movie'] = None
+        context_dict['comments'] = None
+
+    return render(request, 'rango/movie.html', context=context_dict)
 
 @login_required
 def add_category(request):
@@ -146,3 +162,50 @@ def search(request):
             # Run our Bing function to get the results list!
             result_list = run_query(query)
     return render(request, 'rango/search.html', {'result_list': result_list})
+
+# Record views of the page of movies.
+def viewMovies(request):
+    if request.method == 'GET':
+        movie_poster = request.GET.get('movie_poster')
+
+        try:
+            selected_movie = Movie.objects.get(slug=movie_poster)
+        except Movie.DoesNotExist:
+            return redirect(reverse('rango:index'))
+
+        selected_movie.views = selected_movie.views + 1
+        selected_movie.save()
+
+        return redirect(reverse('raango:show_movie', kwargs={'movie_title_slug': selected_movie.slug}))
+
+    return redirect(reverse('rango:index'))
+
+
+@login_required
+def add_comment(request, movie_title_slug):
+    try:
+        movie = Movie.objects.get(slug=movie_title_slug)
+    except:
+        movie = None
+
+    if movie is None:
+        return redirect(reverse('coffquiz:index'))
+
+    user = User.objects.get(username=request.user)
+
+    form = CommentForm()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            if movie:
+                comment = form.save(commit=False)
+                comment.movie = movie
+                comment.user = user
+                comment.save()
+                return redirect(reverse('coffquiz:show_movie', kwargs={'movie_title_slug': movie_title_slug}))
+            else:
+                print(form.errors)
+
+    context_dict = {'form': form, 'movie': movie}
+    return render(request, 'coffquiz/add_comment.html', context=context_dict)

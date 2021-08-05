@@ -15,4 +15,7 @@ urlpatterns = [
     path('restricted/', views.restricted, name='restricted'),
 #     path('logout/', views.user_logout, name='logout'),
     path('search/', views.search, name='search'),
+    path('category/movies/<slug:movie_title_slug>/',
+         views.show_movie, name='show_movie'),
+    path('viewMovies/', views.viewMovies, name='viewMovies'),
 ]

@@ -10,9 +10,28 @@
 {% endblock %}
 
 {% block body_block %}
-    {% if movie %}
-    views : {{ movie.views }}
+{% if movie %}
+        <h1>{{ movie.title }}</h1>
+        views: {{ movie.views }}
+        <p>{{ movie.story }}</p>
+        {% if user.is_authenticated %}
+        {% endif %}
     {% else %}
         The specified movie is not available on MOVIE LAND.
     {% endif %}
+
+    {% if comments %}
+    <ul>
+        {% for comment in comments %}
+            <li>
+                <h3>{{ comment.user }}</h3>
+                <p>{{ comment.time }}</p></br>
+                {{ comment.comments }}
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        Write the first comment now!
+    {% endif %}
+
 {% endblock %}

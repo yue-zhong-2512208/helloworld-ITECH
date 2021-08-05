@@ -1,7 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 
 class Category(models.Model):
     NAME_MAX_LENGTH = 128
@@ -33,10 +33,12 @@ class Movie(models.Model):
     poster = models.IntegerField(default=0)
     year = models.IntegerField(default=888)
     story = models.CharField(max_length=STORY_MAX_LENGTH)
+    views = models.IntegerField(default=0)
+    slug = models.SlugField(unique=True)
 
-    def likeMovie(self):
-        self.movie_likes = self.movie_likes + 1
-        return
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Movie, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -49,3 +51,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    comments = models.CharField(max_length=128)
+    time = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.comments

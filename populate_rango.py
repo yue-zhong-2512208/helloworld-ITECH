@@ -7,56 +7,125 @@ django.setup()
 from rango.models import Category, Movie
 
 def populate():
-    python_movies = [
-        {'title': 'Official Python Tutorial',
-        'url': 'http://docs.python.org/3/tutorial/', 'movie_likes': '45',},
-        {'title': 'How to Think like a Computer Scientist',
-         'url': 'http://www.greenteapress.com/thinkpython/', 'movie_likes': '63', },
-        {'title': 'Learn Python in 10 Minutes',
-         'url': 'http://www.korokithakis.net/tutorials/python/', 'movie_likes': '20', }]
+    action_movies = [
+        {'title': 'The Dark Knight', 'year': '2008', 'poster': '1',
+         'url': 'https://www.imdb.com/title/tt0468569/?ref_=adv_li_tt', 'movie_likes': '45', 
+         'story': 'When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.'},
+        
+        {'title': 'The Lord of the Rings: The Return of the King', 'year': '2003', 'poster': '2',
+         'url': 'https://www.imdb.com/title/tt0167260/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'Gandalf and Aragorn lead the World of Men against Sauron\'s army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.'},
+        
+        {'title': 'Inception', 'year': '2010', 'poster': '3',
+         'url': 'https://www.imdb.com/title/tt1375666/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.'},
+        
+        {'title': 'The Lord of the Rings: The Fellowship of the Ring', 'year': '2001', 'poster': '4',
+         'url': 'https://www.imdb.com/title/tt0120737/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.'},
 
-    django_movies = [
-        {'title': 'Official Django Tutorial',
-         'url': 'https://docs.djangoproject.com/en/2.1/intro/tutorial01/', 'movie_likes': '23', },
-        {'title': 'Django Rocks',
-         'url': 'http://www.djangorocks.com/', 'movie_likes': '27', },
-        {'title': 'How to Tango with Django',
-         'url': 'http://www.tangowithdjango.com/', 'movie_likes': '14', }]
+        {'title': 'Brothers in Arms', 'year': '2016', 'poster': '5',
+         'url': 'https://www.imdb.com/title/tt5813916/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'In a desolate war zone where screams of the innocent echo, seven Maroon Berets will dance with death on the very line between disaster and valor.'},
+        ]
 
-    other_movies = [
-        {'title': 'Bottle',
-         'url': 'http://bottlepy.org/docs/dev/', 'movie_likes': '19', },
-        {'title': 'Flask',
-         'url': 'http://flask.pocoo.org', 'movie_likes': '13', }]
+    musical_movies = [
+        {'title': 'The Lion King', 'year': '1994', 'poster': '6',
+         'url': 'https://www.imdb.com/title/tt0110357/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'Lion prince Simba and his father are targeted by his bitter uncle, who wants to ascend the throne himself.'},
+
+        {'title': 'Hamilton', 'year': '2020', 'poster': '7',
+         'url': 'https://www.imdb.com/title/tt8503618/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'The real life of one of America\'s foremost founding fathers and first Secretary of the Treasury, Alexander Hamilton. Captured live on Broadway from the Richard Rodgers Theater with the original Broadway cast.'},
+
+        {'title': 'Anand', 'year': '2010', 'poster': '8',
+         'url': 'https://www.imdb.com/title/tt0066763/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'The story of a terminally ill man who wishes to live life to the fullest before the inevitable occurs, as told by his best friend.'},
+
+        {'title': 'Singin\' in the Rain', 'year': '1952', 'poster': '9',
+         'url': 'https://www.imdb.com/title/tt0045152/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'A silent film production company and cast make a difficult transition to sound.'},
+
+        {'title': 'Sholay', 'year': '1975', 'poster': '10',
+         'url': 'https://www.imdb.com/title/tt0073707/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'After his family is murdered by a notorious and ruthless bandit, a former police officer enlists the services of two outlaws to capture the bandit.'},
+    ]
+
+    romance_movies = [
+        {'title': 'Forrest Gump', 'year': '1994', 'poster': '11',
+         'url': 'https://www.imdb.com/title/tt0109830/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold from the perspective of an Alabama man with an IQ of 75, whose only desire is to be reunited with his childhood sweetheart.'},
+
+        {'title': 'Life Is Beautiful', 'year': '1997', 'poster': '12',
+         'url': 'https://www.imdb.com/title/tt0118799/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'When an open-minded Jewish librarian and his son become victims of the Holocaust, he uses a perfect mixture of will, humor, and imagination to protect his son from the dangers around their camp.'},
+
+        {'title': 'Cinema Paradiso', 'year': '1988', 'poster': '13',
+         'url': 'https://www.imdb.com/title/tt0095765/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'A filmmaker recalls his childhood when falling in love with the pictures at the cinema of his home village and forms a deep friendship with the cinema\'s projectionist.'},
+
+        {'title': 'Casablanca', 'year': '1942', 'poster': '14',
+         'url': 'https://www.imdb.com/title/tt0034583/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'A cynical expatriate American cafe owner struggles to decide whether or not to help his former lover and her fugitive husband escape the Nazis in French Morocco.'},
+
+        {'title': 'Modern Times', 'year': '1936', 'poster': '15',
+         'url': 'https://www.imdb.com/title/tt0027977/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'The Tramp struggles to live in modern industrial society with the help of a young homeless woman.'},
+    ]
+    
+    sport_movies = [
+        {'title': 'Dangal', 'year': '2016', 'poster': '16',
+         'url': 'https://www.imdb.com/title/tt5074352/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'Former wrestler Mahavir Singh Phogat and his two wrestler daughters struggle towards glory at the Commonwealth Games in the face of societal oppression.'},
+
+        {'title': 'Children of Heaven', 'year': '1997', 'poster': '17',
+         'url': 'https://www.imdb.com/title/tt0118849/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'After a boy loses his sister\'s pair of shoes, he goes on a series of adventures in order to find them. When he can\'t, he tries a new way to "win" a new pair.'},
+
+        {'title': 'Bhaag Milkha Bhaag', 'year': '2013', 'poster': '18',
+         'url': 'https://www.imdb.com/title/tt2356180/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'The truth behind the ascension of Milkha Singh who was scarred because of the India-Pakistan partition.'},
+
+        {'title': 'Paan Singh Tomar', 'year': '2012', 'poster': '19',
+         'url': 'https://www.imdb.com/title/tt1620933/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'The story of Paan Singh Tomar, an Indian athlete and seven-time national steeplechase champion who becomes one of the most feared dacoits in Chambal Valley after his retirement.'},
+
+        {'title': 'Chak De! India', 'year': '2007', 'poster': '20',
+         'url': 'https://www.imdb.com/title/tt0871510/?ref_=adv_li_tt', 'movie_likes': '45',
+         'story': 'Kabir Khan, the coach of the Indian Women\'s National Hockey Team, dreams of making his all-girls team emerge victorious against all odds.'},
+    ]
         
     cats = {
-        'Python': {'movies': python_movies, 'movie_likes': 128, 'likes' : 64}, 
-        'Django': {'movies': django_movies, 'movie_likes': 64, 'likes': 32},
-        'Other Frameworks': {'movies': other_movies, 'movie_likes': 32, 'likes': 16}}
+        'Action': {'movies': action_movies}, 
+        'Musical': {'movies': musical_movies},
+        'Romance': {'movies': romance_movies},
+        'Sport': {'movies': sport_movies},
+        }
 
     for cat, cat_data in cats.items():  
         c = add_cat(
-            cat, movie_likes=cat_data['movie_likes'], likes=cat_data['likes'])
+            cat)
         for p in cat_data['movies']:
-            add_movie(c, p['title'], p['url'], movie_likes=p['movie_likes'])
+            add_movie(c, p['title'], p['year'], p['poster'], p['url'], p['movie_likes'], p['story'])
 
     for c in Category.objects.all():
         for p in Movie.objects.filter(category=c):
             print(f'- {c}: {p}')
 
 
-def add_movie(cat, title, url, movie_likes=0): 
+def add_movie(cat, title, year, poster, url, movie_likes, story): 
     p = Movie.objects.get_or_create(category=cat, title=title)[0] 
+    p.year = year
+    p.poster = poster
     p.url = url 
     p.movie_likes = movie_likes
+    p.story = story
     p.save()
     return p
 
 
-def add_cat(name, movie_likes=0, likes=0):
+def add_cat(name):
     c = Category.objects.get_or_create(name=name)[0] 
-    c.movie_likes = movie_likes
-    c.likes = likes
     c.save() 
     return c
 

@@ -1,0 +1,18 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {% if movie %}
+        {{ movie.name }}
+    {% else %}
+        Unknown Movie
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+    {% if movie %}
+    views : {{ movie.views }}
+    {% else %}
+        The specified movie is not available on MOVIE LAND.
+    {% endif %}
+{% endblock %}

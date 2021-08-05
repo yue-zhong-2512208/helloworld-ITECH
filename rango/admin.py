@@ -4,7 +4,7 @@ from rango.models import UserProfile
 
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'url')
+    list_display = ('title', 'category', 'url', 'poster')
 
 
 admin.site.register(Movie, MovieAdmin)

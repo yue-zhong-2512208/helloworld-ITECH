@@ -25,13 +25,17 @@ class Category(models.Model):
 class Movie(models.Model):
     TITLE_MAX_LENGTH = 128
     URL_MAX_LENGTH = 200
+    STORY_MAX_LENGTH = 500
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=TITLE_MAX_LENGTH)
     url = models.URLField()
     movie_likes = models.IntegerField(default=0)
+    poster = models.IntegerField(default=0)
+    year = models.IntegerField(default=888)
+    story = models.CharField(max_length=STORY_MAX_LENGTH)
 
     def likeMovie(self):
-        self.movie_likes += 1
+        self.movie_likes = self.movie_likes + 1
         return
 
     def __str__(self):

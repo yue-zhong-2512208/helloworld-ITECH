@@ -14,9 +14,44 @@
     <h1>{{ category.name }}</h1>
     {% if movies %}
     <ul>
-        {% for movie in movies %}
-        <li><a href="{{ movie.url }}">{{ movie.title }}</a></li>
-        {% endfor %}
+        <div class="container">
+            <div class="row">
+                
+                <div class="card-group">
+
+                        {% if movies %}
+                            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                            
+                            {% for movie in movies %}
+                            <div class="col-sm-3 py-2">
+                            
+                                <div class="card shadow-sm">
+                                    <img src="/static/poster/{{ movie.poster }}.png" class="img-fluid" alt="poster">
+                                        <title>{{ movie.title }}</title>
+                                    </svg>
+
+                                    <div class="card-body">
+                                        <p class="card-text">{{ movie.title }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{{ movie.likeMovie }}">Likes: {{ movie.movie_likes }}</a></button>
+                                            </div>
+                                                <small class="text-muted"><a href="{{ movie.url }}">More</a></small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            {% endfor %}
+                            
+                        {% else %}
+                            <strong>There are no movies present.</strong>
+                        {% endif %}
+
+                </div>
+
+            </div>
+        </div>
     </ul>
     {% else %}
     <strong>No movies currently in category.</strong> <br />

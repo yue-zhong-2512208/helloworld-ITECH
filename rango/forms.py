@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rango.models import UserProfile, Movie, Category
+from rango.models import UserProfile, Movie, Category, Movie_rating
 from django import forms
 
 
@@ -47,3 +47,19 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture',)
+
+
+class CommentForm(forms.ModelForm):
+    # check if rate is 0
+    def clean(self):
+        cleaned_data = super(CommentForm, self).clean()
+        score = cleaned_data.get('score')
+        if score == 0:
+            raise forms.ValidationError(message='Rate cannot be 0!')
+        else:
+            return cleaned_data
+
+    class Meta:
+        # record score and comment
+        model = Movie_rating
+        fields = ['score', 'comment']

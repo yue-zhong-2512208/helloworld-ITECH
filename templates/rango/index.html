@@ -25,75 +25,7 @@
 
 <div class="container">
     <div class="row">
-        {% comment %} <div class="col-md-6">
-            <div class="card mb-6">
-                <div class="card-body">
-                    <h2>Most Liked Categories</h2>
-                    <p class="card-text">
-                        {% if categories %}
-                        <ul class="list-group">
-                            {% for category in categories %}
-                                <li class="list-group-item">
-                                    <a href="{% url 'rango:show_category' category.slug %}">
-                                    {{ category.name }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                        {% else %}
-                            <strong>There are no categories present.</strong>
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div> {% endcomment %}
-
-        {% comment %} <div class="col-md-6">
-            <div class="card mb-6">
-                <div class="card-body">
-                    <h2>Hot Movies</h2>
-                    <p class="card-text">
-                        {% if movies %}
-                            <ul class="list-group">
-                            {% for movie in movies %}
-                                <li class="list-group-item">
-                                    <a href="{{ movie.url }}">{{ movie.title }}</a>
-                                </li>
-                            {% endfor %}
-                            </ul>
-                        {% else %}
-                            <strong>There are no movies present.</strong>
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-        </div> {% endcomment %}
-
-        {% comment %} {% if movies %}
-            <ul class="list-group">
-            {% for movie in movies %}
-                <div class="col-md-6">
-                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                        <div class="col p-4 d-flex flex-column position-static">
-                            <strong class="d-inline-block mb-2 text-success">movie category</strong>
-                            <h3 class="mb-0">{{movie.title}}</h3>
-                                <div class="mb-1 text-muted">movie likes</div>
-                                <p class="mb-auto">movie discription</p>
-                                <a href="#" class="stretched-link"><a href="{{ movie.url }}">Read More</a></a>
-                        </div>
-                        <div class="col-auto d-none d-lg-block">
-                            <svg class="bd-placeholder-img" width="182" height="268" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <title>{{movie.title}}</title>
-                            <rect width="100%" height="100%" fill="#55595c"/>
-                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no movies present.</strong>
-        {% endif %} {% endcomment %}
-
+    
         <div class="card-group">
 
                 {% if movies %}
@@ -115,7 +47,7 @@
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{{ movie.likeMovie }}">Likes: {{ movie.movie_likes }}</a></button>
                                     </div>
-                                        <small class="text-muted"><a href="{{ movie.url }}">More</a></small>
+                                        <small class="text-muted"><a href="{{ movie.url }}">Details</a></small>
                                 </div>
                             </div>
                         </div>

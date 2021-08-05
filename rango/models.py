@@ -27,11 +27,13 @@ class Category(models.Model):
     NAME_MAX_LENGTH = 128
     name = models.CharField(max_length=NAME_MAX_LENGTH)
     slug = models.SlugField()
-    class Meta:
-        db_table = 'Category'
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
+    # __str__() = toString()
     def __str__(self):
-        return f"<Category:{self.name}>"
+       return self.name
 
 # class Movie(models.Model):
 #     TITLE_MAX_LENGTH = 128

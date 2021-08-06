@@ -6,7 +6,7 @@ This is a web development project for ITECH course work in UofG.
 **Tutor Name:** Fuxiang Tao
 
 ## Team Members
-- A
+- Yue Zhong 2512208
 - B
 - C
 - D

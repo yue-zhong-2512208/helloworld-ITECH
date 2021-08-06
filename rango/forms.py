@@ -55,8 +55,8 @@ class UserProfileForm(forms.ModelForm):
         fields = ('website', 'picture',)
 
 class CommentForm(forms.ModelForm):
-    comments = forms.CharField(max_length=128, help_text="Please ennter the coomment content.")
+    comments = forms.CharField(max_length=128, widget=forms.Textarea, help_text="Please ennter the coomment content.")
     time = forms.DateTimeField(widget=forms.HiddenInput(), initial=timezone.now)
     class Meta:
         model = Comment
-        exclude = ('article',)
+        exclude = ('article', 'user', )

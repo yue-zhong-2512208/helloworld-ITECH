@@ -18,8 +18,8 @@ def about(request):
 
 def index(request):
     # without '-' will sequence from the most to the least
-    movie_list_byViews = Movie.objects.order_by('views')[:4]
-    movie_list_byLikes = Movie.objects.order_by('movie_likes')[:4]
+    movie_list_byViews = Movie.objects.order_by('-views')[:4]
+    movie_list_byLikes = Movie.objects.order_by('-movie_likes')[:4]
     context_dict = {}
     context_dict['boldmessage'] = 'Enjoy your journey in the world of movies.'
     context_dict['moviesByViews'] = movie_list_byViews
@@ -56,7 +56,7 @@ def show_category(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
         movies = Movie.objects.filter(
-            category=category).order_by('movie_likes')
+            category=category).order_by('-movie_likes')
         context_dict['movies'] = movies
         context_dict['category'] = category
     except Category.DoesNotExist:
@@ -204,10 +204,10 @@ def search(request):
 # Record views of the page of movies.
 def viewMovies(request):
     if request.method == 'GET':
-        movie_movieid = request.GET.get('movie_movieid')
+        movie_title = request.GET.get('movie_title')
 
         try:
-            selected_movie = Movie.objects.get(slug=movie_movieid)
+            selected_movie = Movie.objects.get(slug=movie_title)
         except Movie.DoesNotExist:
             return redirect(reverse('rango:index'))
 

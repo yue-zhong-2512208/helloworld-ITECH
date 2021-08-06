@@ -2,12 +2,10 @@
 from datetime import datetime
 from rango.bing_search import run_query
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rango.models import Category, Movie, Comment
-from rango.forms import CategoryForm, MovieForm, UserForm, UserProfileForm, CommentForm
+from rango.forms import CategoryForm, MovieForm, CommentForm
 from django.contrib.auth.models import User
 
 
@@ -20,12 +18,12 @@ def about(request):
 
 def index(request):
     # without '-' will sequence from the most to the least
-    category_list = Category.objects.order_by('-likes')[:5]
-    movie_list = Movie.objects.order_by('-movie_likes')[:8]
+    movie_list_byViews = Movie.objects.order_by('views')[:4]
+    movie_list_byLikes = Movie.objects.order_by('movie_likes')[:4]
     context_dict = {}
     context_dict['boldmessage'] = 'Enjoy your journey in the world of movies.'
-    context_dict['categories'] = category_list
-    context_dict['movies'] = movie_list
+    context_dict['moviesByViews'] = movie_list_byViews
+    context_dict['moviesByLikes'] = movie_list_byLikes
     visitor_cookie_handler(request)
     response = render(request, 'rango/index.html', context=context_dict)
     return response
@@ -58,7 +56,7 @@ def show_category(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
         movies = Movie.objects.filter(
-            category=category).order_by('-movie_likes')
+            category=category).order_by('movie_likes')
         context_dict['movies'] = movies
         context_dict['category'] = category
     except Category.DoesNotExist:
@@ -249,3 +247,4 @@ def add_comment(request, movie_title_slug):
 
     context_dict = {'form': form, 'movie': movie}
     return render(request, 'coffquiz/add_comment.html', context=context_dict)
+

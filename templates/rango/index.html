@@ -23,47 +23,74 @@
     </div>
 </div>
 
-<div class="container">
-    <div class="row">
-        
-        <div class="card-group">
+    <div class="jumbotron p-4"> 
+    {% comment %} the number after 'p-' can modify the space around the title {% endcomment %}
+        <div class="container">
+            <h2 class="jumbotron-heading">Most Liked Movies</h2>
 
-                {% if movies %}
+            <div class="card-group">
+                {% if moviesByLikes %}
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    
-                    {% for movie in movies %}
-                    <div class="col-sm-3 py-2">
-                    
-                        <div class="card shadow-sm">
-                            <img src="/static/poster/{{ movie.movieid }}.png" class="img-fluid" alt="movieid">
-                            {% comment %} <svg class="bd-placeholder-img card-img-top" width="182" height="268" xmlns="static\movie\movieid\1.jpg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"> {% endcomment %}
-                                <title>{{ movie.title }}</title>
-                                {% comment %} <rect width="100%" height="100%" fill="#55595c"/>
-                                <text x="50%" y="50%" fill="#eceeef" dy=".3em"></text> {% endcomment %}
-                            </svg>
-
-                            <div class="card-body">
-                                <p class="card-text">{{ movie.title }}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
-                                        <small class="text-muted">{{ movie.movie_likes }} Likes /</a></small>
-                                        <small class="text-muted">/ {{ movie.views }} Views</a></small>
+                        {% for movie in moviesByLikes %}
+                        <div class="col-sm-3 py-2">
+                            <div class="card shadow-sm">
+                                <img src="/static/poster/{{ movie.movieid }}.png" class="img-fluid" alt="movieid"></img>
+                                    <title>{{ movie.title }}</title>
+                                <div class="card-body">
+                                    <p class="card-text">{{ movie.title }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <small class="text-muted">{{ movie.movie_likes }} Likes /</a></small>
+                                            <small class="text-muted">/ {{ movie.views }} Views</a></small>
+                                        </div>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'rango:show_movie' movie.slug %}">More Info</a></button>
                                     </div>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'rango:show_movie' movie.slug %}">More Info</a></button>
                                 </div>
                             </div>
                         </div>
-
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                    
                 {% else %}
-                    <strong>There are no movies present.</strong>
+                    <strong>There are no movies to present.</strong>
                 {% endif %}
-
+            </div>
         </div>
-
     </div>
-</div>
+
+    <div class="jumbotron p-4"> 
+    {% comment %} the number after 'p-' can modify the space around the title {% endcomment %}
+        <div class="container">
+            <h2 class="jumbotron-heading">Most Viewed Movies</h2>
+
+            <div class="card-group">
+                {% if moviesByViews %}
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        {% for movie in moviesByViews %}
+                        <div class="col-sm-3 py-2">
+                            <div class="card shadow-sm">
+                                <img src="/static/poster/{{ movie.movieid }}.png" class="img-fluid" alt="movieid"></img>
+                                    <title>{{ movie.title }}</title>
+                                <div class="card-body">
+                                    <p class="card-text">{{ movie.title }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <small class="text-muted">{{ movie.movie_likes }} Likes /</a></small>
+                                            <small class="text-muted">/ {{ movie.views }} Views</a></small>
+                                        </div>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'rango:show_movie' movie.slug %}">More Info</a></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <strong>There are no movies to present.</strong>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
 
 {% endblock %}

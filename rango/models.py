@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
@@ -6,8 +7,6 @@ from django.utils import timezone
 class Category(models.Model):
     NAME_MAX_LENGTH = 128
     name = models.CharField(max_length=NAME_MAX_LENGTH, unique=True)
-    views = models.IntegerField(default=0)
-    likes = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
@@ -32,7 +31,7 @@ class Movie(models.Model):
     movie_likes = models.IntegerField(default=0)
     poster = models.ImageField(
         upload_to='poster', blank=True)
-    year = models.IntegerField(default=888)
+    year = models.IntegerField(default=2021)
     story = models.CharField(max_length=STORY_MAX_LENGTH)
     views = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)

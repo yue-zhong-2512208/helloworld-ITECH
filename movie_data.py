@@ -69,12 +69,18 @@ def get_user_and_rating():
         # csv文件中，一条记录就是一个用户对一部电影的评分和时间戳，一个用户可能有多条评论
         # 所以要先取出用户所有的评分，设置成一个字典,格式为{ user:{movie1:rating, movie2:rating, ...}, ...}
         user_id_dct=dict()
+        user_com_dct=dict()
         for line in reader:
             user_id=line[title_dct['userId']]
             imdb_id=line[title_dct['movieId']]
-            rating=line[title_dct['rating']]
+            rating=line[title_dct['rating']]            
             user_id_dct.setdefault(user_id,dict())
             user_id_dct[user_id][imdb_id]=rating
+            
+            comment=line[title_dct['comment']]
+            # if len(comment)!=0:
+            #     user_com_dct.setdefault(user_id,dict())
+            #     user_com_dct[user_id][imdb_id]=comment
     # 对所有用户和评分记录
     for user_id,ratings in user_id_dct.items():
         u=User.objects.create(name=user_id,password=user_id,email=f'{user_id}@1.com')
@@ -84,11 +90,13 @@ def get_user_and_rating():
         for imdb_id,rating in ratings.items():
             # Movie_rating(uid=)
             movie=Movie.objects.get(imdb_id=imdb_id)
+            
             relation=Movie_rating(user=u,movie=movie,score=rating,comment='')
             relation.save()
             # break
         print(f'{user_id} process success')
-        # break
+    
+
 
 
 

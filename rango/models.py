@@ -111,7 +111,7 @@ class User(models.Model):
     rating_movies = models.ManyToManyField(Movie, through="Movie_rating")
 
     def __str__(self):
-        return "<USER:( name: {:},password: {:},email: {:} )>".format(self.name, self.password, self.email)
+        return "UserName: {:}".format(self.name)
 
 class Movie_rating(models.Model):
     # 评分的用户
@@ -145,4 +145,5 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
 

@@ -204,32 +204,30 @@ def search(request):
     return render(request, 'rango/search.html', {'result_list': result_list})
 
 class MovieDetailView(DetailView):
-    '''电影详情页面'''
+    '''movie detail page'''
     model = Movie
     template_name = 'rango/detail.html'
-    # 上下文对象的名称
+
     context_object_name = 'movie'
 
     def get_context_data(self, **kwargs):
-        # 重写获取上下文方法，增加评分参数
         context = super().get_context_data(**kwargs)
-        # 判断是否登录用
+        # to judge if login
         login = True
         try:
             user_id = self.request.session['user_id']
         except KeyError as e:
-            login = False  # 未登录
+            login = False  # not login
 
-        # 获得电影的pk
         pk = self.kwargs['pk']
         movie = Movie.objects.get(pk=pk)
 
         if login:
-            # 已经登录，获取当前用户的历史评分数据
+            # Get the current user's historical rating data
             user = User.objects.get(pk=user_id)
 
             rating = Movie_rating.objects.filter(user=user, movie=movie).first()
-            # 默认值
+            # default value
             score = 0
             comment = ''
             if rating:
@@ -237,42 +235,41 @@ class MovieDetailView(DetailView):
                 comment = rating.comment
             context.update({'score': score, 'comment': comment})
 
-        # 判断是否登录，没有登录则不显示评分页面
-        context.update({'login': login})
+        #comments
+        Com=Movie_rating.objects.filter(movie=movie,comment__regex='^(a-z|A-Z|0-9)*[^$%^&*;:,<>?()\""\']{1,100}$')
+        hot_comments = list(Com)[:6]
+        print(hot_comments)
+        context.update({'hot_comments': hot_comments})
 
         return context
 
-    # 接受评分表单,pk是当前电影的数据库主键id
+    # receive form
     def post(self, request, pk):
         url = request.get_full_path()
         form = CommentForm(request.POST)
         if form.is_valid():
-            # 获取分数和评论
             score = form.cleaned_data.get('score')
             comment = form.cleaned_data.get('comment')
             print(score, comment)
-            # 获取用户和电影
             user_id = request.session['user_id']
             user = User.objects.get(pk=user_id)
             movie = Movie.objects.get(pk=pk)
 
-            # 更新一条记录
+            # Comment update 
             rating = Movie_rating.objects.filter(user=user, movie=movie).first()
             if rating:
-                # 如果存在则更新
                 # print(rating)
                 rating.score = score
                 rating.comment = comment
                 rating.save()
-                # messages.info(request,"更新评分成功！")
+                # messages.info(request,"Comment updated successfully!")
             else:
-                print('记录不存在')
-                # 如果不存在则添加
+                print('Comment does not exist ')
                 rating = Movie_rating(user=user, movie=movie, score=score, comment=comment)
                 rating.save()
-            messages.info(request, "评论成功!")
+            messages.info(request, "successful!")
 
         else:
-            # 表单没有验证通过
-            messages.info(request, "评分不能为空!")
-        return redirect(reverse('movie:detail', args=(pk,)))
+            # The form is not validated
+            messages.info(request, "Rating cannot be empty!")
+        return redirect(reverse('rango:detail', args=(pk,)))

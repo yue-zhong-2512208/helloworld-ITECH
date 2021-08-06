@@ -2,7 +2,7 @@ from django.test import TestCase
 
 # Create your tests here.
 from django.urls import reverse
-from rango.models import Category, Movie
+from rango.models import Category
 
 # Model test
 class CategoryMethodTests(TestCase):

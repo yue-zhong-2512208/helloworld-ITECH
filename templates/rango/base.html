@@ -31,7 +31,6 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"><a class="nav-link" href="{% url 'rango:index' %}">Home</a></li>
-                        <li class="nav-item "><a class="nav-link" href="{% url 'rango:about' %}">About</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'rango:all_movies' %}">Library</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'rango:search_insite' %}">Search This Site</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'rango:search' %}">Search the Internet</a></li>
@@ -44,6 +43,7 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
                         {% endif %}
+                        <li class="nav-item "><a class="nav-link" href="{% url 'rango:about' %}">About</a></li>
                     </ul>
                 </div>
             </nav>

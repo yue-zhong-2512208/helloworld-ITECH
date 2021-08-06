@@ -17,7 +17,7 @@ urlpatterns = [
       path('like_movie/', views.LikeMovie.as_view(), name='like_movie'),
       path('movies/', views.all_movies, name='all_movies'),
 
-      path('category/movies/<slug:article_title_slug>/add_comment',
+      path('category/movies/<slug:movie_title_slug>/add_comment',
             views.add_comment, name='add_comment'),
       path('add_comment/', views.add_comment, name='add_comment'),
 

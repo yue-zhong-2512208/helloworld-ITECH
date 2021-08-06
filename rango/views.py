@@ -7,6 +7,9 @@ from django.shortcuts import render, redirect
 from rango.models import Category, Movie, Comment
 from rango.forms import CategoryForm, MovieForm, CommentForm
 from django.contrib.auth.models import User
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.http import HttpResponse
 
 
 def about(request):
@@ -89,6 +92,14 @@ def show_movie(request, movie_title_slug):
     return render(request, 'rango/movie.html', context=context_dict)
 
 
+def all_movies(request):
+    allArticles = Article.objects.all().order_by('-views')
+    context_dict = {}
+    context_dict['all_movies'] = allMovies
+
+    return render(request, 'coffquiz/all_movies.html', context=context_dict)
+
+
 @login_required
 def add_category(request):
     form = CategoryForm()
@@ -151,7 +162,6 @@ def add_movie(request, category_name_slug):
             if category:
                 movie = form.save(commit=False)
                 movie.category = category
-                movie.movie_likes = 0
                 movie.save()
                 return redirect(reverse('rango:show_category',
                                         kwargs={'category_name_slug':
@@ -166,39 +176,6 @@ def add_movie(request, category_name_slug):
 @login_required
 def restricted(request):
     return render(request, 'rango/restricted.html')
-
-
-def get_server_side_cookie(request, cookie, default_val=None):
-    val = request.session.get(cookie)
-    if not val:
-        val = default_val
-    return val
-
-
-def visitor_cookie_handler(request):
-    visits = int(get_server_side_cookie(request, 'visits', '1'))
-    last_visit_cookie = get_server_side_cookie(
-        request, 'last_visit', str(datetime.now()))
-    last_visit_time = datetime.strptime(
-        last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
-
-    if (datetime.now() - last_visit_time).days > 0:
-        visits = visits + 1
-        request.session['last_visit'] = str(datetime.now())
-    else:
-        request.session['last_visit'] = last_visit_cookie
-
-    request.session['visits'] = visits
-
-
-def search(request):
-    result_list = []
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-        if query:
-            # Run our Bing function to get the results list!
-            result_list = run_query(query)
-    return render(request, 'rango/search.html', {'result_list': result_list})
 
 
 # Record views of the page of movies.
@@ -248,3 +225,40 @@ def add_comment(request, movie_title_slug):
     context_dict = {'form': form, 'movie': movie}
     return render(request, 'rango/add_comment.html', context=context_dict)
 
+# this class is for searching in this website
+
+
+def sidebar_search(max_results=0, starts_with=''):
+    # this function is for get the movie list
+    movie_list = []
+
+    if starts_with:
+        movie_list = Movie.objects.filter(name__istartswith=starts_with)
+
+    print(movie_list)
+
+    # if max_results is 0, all result will be returned
+    if max_results > 0:
+        if len(movie_list) > max_results:
+            movie_list = movie_list[:max_results]
+
+    return movie_list
+
+
+# this class is for counting movie_likes
+class LikeCategoryView(View):
+    @method_decorator(login_required())
+    def get(self, request):
+        movie_id = request.GET['movie_id']
+
+        try:
+            movie = Movie.objects.get(id=int(movie_id))
+        except Movie.DoesNotExist:
+            return HttpResponse(-1)
+        except ValueError:
+            return HttpResponse(-1)
+
+        movie.movie_likes = movie.movie_likes + 1
+        movie.save()
+
+        return HttpResponse(movie.movie_likes)

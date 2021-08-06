@@ -75,10 +75,10 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context=context_dict)
 
 
-def show_movie(request, movie_poster_slug):
+def show_movie(request, movie_movieid_slug):
     context_dict = {}
     try:
-        movie = Movie.objects.get(slug=movie_poster_slug)
+        movie = Movie.objects.get(slug=movie_movieid_slug)
         comments = Comment.objects.filter(movie=movie)
 
         context_dict['movie'] = movie
@@ -193,24 +193,23 @@ def visitor_cookie_handler(request):
     request.session['visits'] = visits
 
 
-# def search(request):
-#     result_list = []
-#     if request.method == 'POST':
-#         query = request.POST['query'].strip()
-#         if query:
-#             # Run our Bing function to get the results list!
-#             result_list = run_query(query)
-#     return render(request, 'rango/search.html', {'result_list': result_list})
-
-# # Record views of the page of movies.
+def search(request):
+    result_list = []
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            # Run our Bing function to get the results list!
+            result_list = run_query(query)
+    return render(request, 'rango/search.html', {'result_list': result_list})
 
 
+# Record views of the page of movies.
 def viewMovies(request):
     if request.method == 'GET':
-        movie_poster = request.GET.get('movie_poster')
+        movie_movieid = request.GET.get('movie_movieid')
 
         try:
-            selected_movie = Movie.objects.get(slug=movie_poster)
+            selected_movie = Movie.objects.get(slug=movie_movieid)
         except Movie.DoesNotExist:
             return redirect(reverse('rango:index'))
 

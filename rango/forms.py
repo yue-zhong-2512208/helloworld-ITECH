@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rango.models import UserProfile, Movie, Category
+from rango.models import UserProfile, Movie, Category, Comment
 from django import forms
 from django.utils import timezone
 
@@ -22,6 +22,8 @@ class MovieForm(forms.ModelForm):
     url = forms.URLField(
         max_length=200, help_text="Please enter the URL of the page.")
     movie_likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+    poster = forms.ImageField(help_text="Please upload the poster of your movie.", required=False)
+    story = forms.CharField(help_text="Please enter the main story of your movie.")
 
     class Meta:
         model = Movie

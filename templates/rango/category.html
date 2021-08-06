@@ -25,7 +25,7 @@
                             <div class="col-sm-3 py-2">
                             
                                 <div class="card shadow-sm">
-                                    <img src="/static/poster/{{ movie.poster }}.png" class="img-fluid" alt="poster">
+                                    <img src="/static/movieid/{{ movie.movieid }}.png" class="img-fluid" alt="movieid">
                                         <title>{{ movie.title }}</title>
                                     </svg>
 
@@ -36,7 +36,7 @@
                                                 <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{{ movie.likeMovie }}">Likes: {{ movie.movie_likes }}</a></button>
                                                 <button type="button" class="btn btn-sm btn-outline-secondary">Views: {{ movie.views }}</a></button>
                                             </div>
-                                                <small class="text-muted"><a href="{% url 'rango:viewMovies' %}?movie_poster={{ movie.slug }}">More</a></small>
+                                                <small class="text-muted"><a href="{% url 'rango:viewMovies' %}?movie_movieid={{ movie.slug }}">More</a></small>
                                                 {% if movie.views > 1 %}
                                                     ({{ movie.views }} views)
                                                 {% elif movie.views == 1 %}

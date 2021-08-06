@@ -1,4 +1,3 @@
-#weihan
 from datetime import datetime
 from rango.bing_search import run_query
 from django.contrib.auth.decorators import login_required

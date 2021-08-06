@@ -44,6 +44,9 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
+    def readpage(self):
+        self.views = self.views + 1
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

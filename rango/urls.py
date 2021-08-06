@@ -22,7 +22,6 @@ urlpatterns = [
       path('add_comment/', views.add_comment, name='add_comment'),
 
       path('restricted/', views.restricted, name='restricted'),
-      path('viewMovies/', views.viewMovies, name='viewMovies'),
       
       path('search/', views.search, name='search'),
       path('search_insite/', views.search_insite, name='search_insite'),

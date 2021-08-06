@@ -81,14 +81,16 @@ def show_movie(request, movie_title_slug):
     try:
         movie = Movie.objects.get(slug=movie_title_slug)
         comments = Comment.objects.filter(movie=movie)
-
         context_dict['movie'] = movie
         context_dict['comments'] = comments
 
     except Category.DoesNotExist:
         context_dict['movie'] = None
         context_dict['comments'] = None
-
+    
+    # Record views of the page of movies.
+    movie.readpage()
+    movie.save()
     return render(request, 'rango/movie.html', context=context_dict)
 
 
@@ -176,24 +178,6 @@ def add_movie(request, category_name_slug):
 @login_required
 def restricted(request):
     return render(request, 'rango/restricted.html')
-
-
-# Record views of the page of movies.
-def viewMovies(request):
-    if request.method == 'GET':
-        movie_title = request.GET.get('movie_title')
-
-        try:
-            selected_movie = Movie.objects.get(slug=movie_title)
-        except Movie.DoesNotExist:
-            return redirect(reverse('rango:index'))
-
-        selected_movie.views = selected_movie.views + 1
-        selected_movie.save()
-
-        return redirect(reverse('raango:show_movie', kwargs={'movie_title_slug': selected_movie.slug}))
-
-    return redirect(reverse('rango:index'))
 
 
 @login_required

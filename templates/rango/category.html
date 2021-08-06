@@ -21,7 +21,7 @@
                         {% if movies %}
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                             
-                            {% for movie in movies %}
+                            {% for movie in movies %}                           
                             <div class="col-sm-3 py-2">
                             
                                 <div class="card shadow-sm">
@@ -34,8 +34,14 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{{ movie.likeMovie }}">Likes: {{ movie.movie_likes }}</a></button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">Views: {{ movie.views }}</a></button>
                                             </div>
-                                                <small class="text-muted"><a href="{{ movie.url }}">More</a></small>
+                                                <small class="text-muted"><a href="{% url 'rango:viewMovies' %}?movie_poster={{ movie.slug }}">More</a></small>
+                                                {% if movie.views > 1 %}
+                                                    ({{ movie.views }} views)
+                                                {% elif movie.views == 1 %}
+                                                    ({{ movie.views }} views)
+                                                {% endif %}
                                         </div>
                                     </div>
                                 </div>

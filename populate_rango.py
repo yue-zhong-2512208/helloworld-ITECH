@@ -7,6 +7,7 @@ django.setup()
 from rango.models import Category, Movie
 
 def populate():
+    # 30 sample movies data in 5 categories are given here
     action_movies = [
         {'title': 'The Dark Knight', 'year': '2008', 'posternum': '1',
          'url': 'https://www.imdb.com/title/tt0468569/?ref_=adv_li_tt', 'likes': '45', 'views': '253', 
@@ -157,7 +158,7 @@ def populate():
 
     for c in Category.objects.all():
         for p in Movie.objects.filter(category=c):
-            print(f'- {c}: {p}')
+            print(f'- {c}: {p}') # showing progess in terminal
 
 
 def add_movie(cat, title, year, posternum, url, likes, views, story): 

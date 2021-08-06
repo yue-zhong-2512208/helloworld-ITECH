@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rango.models import UserProfile, Movie, Category
 from django import forms
+from django.utils import timezone
 
 
 class CategoryForm(forms.ModelForm):
@@ -47,3 +48,10 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture',)
+
+class CommentForm(forms.ModelForm):
+    comments = forms.CharField(max_length=128, help_text="Please ennter the coomment content.")
+    time = forms.DateTimeField(widget=forms.HiddenInput(), initial=timezone.now)
+    class Meta:
+        model = Comment
+        exclude = ('article',)

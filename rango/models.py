@@ -51,6 +51,19 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class LikeMovie(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Like Movie'
+
+    def __str__(self):
+        return self.user.username + 'likes' + self.movie.name
+
+
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)

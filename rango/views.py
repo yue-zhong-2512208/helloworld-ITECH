@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rango.models import Category, Movie, Comment
-from rango.forms import CategoryForm, MovieForm, UserForm, UserProfileForm
+from rango.forms import CategoryForm, MovieForm, UserForm, UserProfileForm, CommentForm
 from django.contrib.auth.models import User
 
 
@@ -64,6 +64,14 @@ def show_category(request, category_name_slug):
     except Category.DoesNotExist:
         context_dict['category'] = None
         context_dict['movies'] = None
+	# Start search functionality code.
+    if request.method == 'POST':
+        if request.method == 'POST':
+            query = request.POST['query'].strip()
+
+            if query:
+                context_dict['result_list'] = run_query(query)
+                context_dict['query'] = query
     return render(request, 'rango/category.html', context=context_dict)
 
 
@@ -82,6 +90,7 @@ def show_movie(request, movie_poster_slug):
 
     return render(request, 'rango/movie.html', context=context_dict)
 
+
 @login_required
 def add_category(request):
     form = CategoryForm()
@@ -94,6 +103,36 @@ def add_category(request):
         else:
             print(form.errors)
     return render(request, 'rango/add_category.html', {'form': form})
+
+
+@login_required
+def add_comment(request, movie_title_slug):
+    try:
+        movie = Movie.objects.get(slug=movie_title_slug)
+    except:
+        movie = None
+
+    if movie is None:
+        return redirect(reverse('coffquiz:index'))
+
+    user = User.objects.get(username=request.user)
+
+    form = CommentForm()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            if movie:
+                comment = form.save(commit=False)
+                comment.movie = movie
+                comment.user = user
+                comment.save()
+                return redirect(reverse('coffquiz:show_movie', kwargs={'movie_title_slug': movie_title_slug}))
+            else:
+                print(form.errors)
+
+    context_dict = {'form': form, 'movie': movie}
+    return render(request, 'coffquiz/add_comment.html', context=context_dict)
 
 
 @login_required
@@ -154,16 +193,18 @@ def visitor_cookie_handler(request):
     request.session['visits'] = visits
 
 
-def search(request):
-    result_list = []
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-        if query:
-            # Run our Bing function to get the results list!
-            result_list = run_query(query)
-    return render(request, 'rango/search.html', {'result_list': result_list})
+# def search(request):
+#     result_list = []
+#     if request.method == 'POST':
+#         query = request.POST['query'].strip()
+#         if query:
+#             # Run our Bing function to get the results list!
+#             result_list = run_query(query)
+#     return render(request, 'rango/search.html', {'result_list': result_list})
 
-# Record views of the page of movies.
+# # Record views of the page of movies.
+
+
 def viewMovies(request):
     if request.method == 'GET':
         movie_poster = request.GET.get('movie_poster')

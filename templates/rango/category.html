@@ -11,37 +11,40 @@
 
 {% block body_block %}
     {% if category %}
+    <div class="jumbotron p-4"> 
+    {% comment %} the number after 'p-' can modify the space around the title {% endcomment %}
+        <div class="container">
+            <h1 class="jumbotron-heading">{{ category.name }} Movies</h1>
+        </div>
+    </div>
     {% if movies %}
-    <ul>
         <div class="container">
             <div class="row">
-                <h1>{{ category.name }} Movies</h1>
+
                 <div class="card-group">
 
                         {% if movies %}
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                             
-                            {% for movie in movies %}                           
+                            {% for movie in movies %}
                             <div class="col-sm-3 py-2">
                             
                                 <div class="card shadow-sm">
-                                    <img src="/static/movieid/{{ movie.movieid }}.png" class="img-fluid" alt="movieid">
+                                    <img src="/static/poster/{{ movie.movieid }}.png" class="img-fluid" alt="movieid">
+                                    {% comment %} <svg class="bd-placeholder-img card-img-top" width="182" height="268" xmlns="static\movie\movieid\1.jpg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"> {% endcomment %}
                                         <title>{{ movie.title }}</title>
+                                        {% comment %} <rect width="100%" height="100%" fill="#55595c"/>
+                                        <text x="50%" y="50%" fill="#eceeef" dy=".3em"></text> {% endcomment %}
                                     </svg>
 
                                     <div class="card-body">
                                         <p class="card-text">{{ movie.title }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{{ movie.likeMovie }}">Likes: {{ movie.movie_likes }}</a></button>
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">Views: {{ movie.views }}</a></button>
+                                                <small class="text-muted">{{ movie.movie_likes }} Likes /</a></small>
+                                                <small class="text-muted">/ {{ movie.views }} Views</a></small>
                                             </div>
-                                                <small class="text-muted"><a href="{% url 'rango:viewMovies' %}?movie_movieid={{ movie.slug }}">More</a></small>
-                                                {% if movie.views > 1 %}
-                                                    ({{ movie.views }} views)
-                                                {% elif movie.views == 1 %}
-                                                    ({{ movie.views }} views)
-                                                {% endif %}
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'rango:show_movie' movie.slug %}">More Info</a></button>
                                         </div>
                                     </div>
                                 </div>
@@ -57,7 +60,6 @@
 
             </div>
         </div>
-    </ul>
     {% else %}
     <strong>No movies currently in category.</strong> <br />
     {% endif %}

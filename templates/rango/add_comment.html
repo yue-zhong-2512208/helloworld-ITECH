@@ -1,4 +1,4 @@
-{% extends 'coffquiz/base.html' %}
+{% extends 'rango/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block body_block %}
-    <form id="add_comment_form" method="post" action="{% url 'coffquiz:add_comment' movie.slug %}">
+    <form id="add_comment_form" method="post" action="{% url 'rango:add_comment' movie.slug %}">
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}
             {{ hidden }}

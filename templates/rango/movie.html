@@ -12,7 +12,7 @@
 {% block body_block %}
 {% if movie %}
         <h1>{{ movie.title }}</h1>
-        views: {{ movie.views }}
+            views: {{ movie.views }}
         <p>{{ movie.story }}</p>
         {% if user.is_authenticated %}
         {% endif %}
@@ -37,5 +37,5 @@
         Write the first comment now!
     {% endif %}
 
-	<a href="{% url 'coffquiz:add_comment' article.slug %}">Add a Comment</a>
+	<a href="{% url 'rango:add_comment' article.slug %}">Add a Comment</a>
 {% endblock %}

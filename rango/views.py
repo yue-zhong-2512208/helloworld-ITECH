@@ -73,10 +73,10 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context=context_dict)
 
 
-def show_movie(request, movie_movieid_slug):
+def show_movie(request, movie_title_slug):
     context_dict = {}
     try:
-        movie = Movie.objects.get(slug=movie_movieid_slug)
+        movie = Movie.objects.get(slug=movie_title_slug)
         comments = Comment.objects.filter(movie=movie)
 
         context_dict['movie'] = movie
@@ -111,7 +111,7 @@ def add_comment(request, movie_title_slug):
         movie = None
 
     if movie is None:
-        return redirect(reverse('coffquiz:index'))
+        return redirect(reverse('rango:index'))
 
     user = User.objects.get(username=request.user)
 
@@ -125,12 +125,12 @@ def add_comment(request, movie_title_slug):
                 comment.movie = movie
                 comment.user = user
                 comment.save()
-                return redirect(reverse('coffquiz:show_movie', kwargs={'movie_title_slug': movie_title_slug}))
+                return redirect(reverse('rango:show_movie', kwargs={'movie_title_slug': movie_title_slug}))
             else:
                 print(form.errors)
 
     context_dict = {'form': form, 'movie': movie}
-    return render(request, 'coffquiz/add_comment.html', context=context_dict)
+    return render(request, 'rango/add_comment.html', context=context_dict)
 
 
 @login_required
@@ -227,7 +227,7 @@ def add_comment(request, movie_title_slug):
         movie = None
 
     if movie is None:
-        return redirect(reverse('coffquiz:index'))
+        return redirect(reverse('rango:index'))
 
     user = User.objects.get(username=request.user)
 
@@ -241,10 +241,10 @@ def add_comment(request, movie_title_slug):
                 comment.movie = movie
                 comment.user = user
                 comment.save()
-                return redirect(reverse('coffquiz:show_movie', kwargs={'movie_title_slug': movie_title_slug}))
+                return redirect(reverse('rango:show_movie', kwargs={'movie_title_slug': movie_title_slug}))
             else:
                 print(form.errors)
 
     context_dict = {'form': form, 'movie': movie}
-    return render(request, 'coffquiz/add_comment.html', context=context_dict)
+    return render(request, 'rango/add_comment.html', context=context_dict)
 

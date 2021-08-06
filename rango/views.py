@@ -12,15 +12,16 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 
 
+# for showing about.html
 def about(request):
     context_dict = {}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
     return render(request, 'rango/about.html', context=context_dict)
 
-
+# for showing index.html
 def index(request):
-    # without '-' will sequence from the most to the least
+    # without '-' will sequence from the least to the most
     movie_list_byViews = Movie.objects.order_by('-views')[:4]
     movie_list_byLikes = Movie.objects.order_by('-likes')[:4]
     context_dict = {}
@@ -32,6 +33,7 @@ def index(request):
     return response
 
 
+# cookie related class
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
     if not val:
@@ -54,6 +56,7 @@ def visitor_cookie_handler(request):
     request.session['visits'] = visits
 
 
+# for showing category.html
 def show_category(request, category_name_slug):
     context_dict = {}
     try:
@@ -76,6 +79,7 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context=context_dict)
 
 
+# for showing movie detail page
 def show_movie(request, movie_title_slug):
     context_dict = {}
     try:
@@ -94,6 +98,7 @@ def show_movie(request, movie_title_slug):
     return render(request, 'rango/movie.html', context=context_dict)
 
 
+# for showing movie library
 def all_movies(request):
     allMovies = Movie.objects.all().order_by('-views')
     context_dict = {}
@@ -102,6 +107,7 @@ def all_movies(request):
     return render(request, 'rango/all_movies.html', context=context_dict)
 
 
+# for adding new category, only for logged users
 @login_required
 def add_category(request):
     form = CategoryForm()
@@ -116,6 +122,8 @@ def add_category(request):
     return render(request, 'rango/add_category.html', {'form': form})
 
 
+# for adding new comment, only for logged users
+# comment shall slug with the user who wrote it
 @login_required
 def add_comment(request, movie_title_slug):
     try:
@@ -146,6 +154,7 @@ def add_comment(request, movie_title_slug):
     return render(request, 'rango/add_comment.html', context=context_dict)
 
 
+# for adding new movie, only for logged users
 @login_required
 def add_movie(request, category_name_slug):
     try:
@@ -175,39 +184,11 @@ def add_movie(request, category_name_slug):
     return render(request, 'rango/add_movie.html', context=context_dict)
 
 
+# for showing a sample restricted page, only for logged users
 @login_required
 def restricted(request):
     return render(request, 'rango/restricted.html')
 
-
-@login_required
-def add_comment(request, movie_title_slug):
-    try:
-        movie = Movie.objects.get(slug=movie_title_slug)
-    except:
-        movie = None
-
-    if movie is None:
-        return redirect(reverse('rango:index'))
-
-    user = User.objects.get(username=request.user)
-
-    form = CommentForm()
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-
-        if form.is_valid():
-            if movie:
-                comment = form.save(commit=False)
-                comment.movie = movie
-                comment.user = user
-                comment.save()
-                return redirect(reverse('rango:show_movie', kwargs={'movie_title_slug': movie_title_slug}))
-            else:
-                print(form.errors)
-
-    context_dict = {'form': form, 'movie': movie}
-    return render(request, 'rango/add_comment.html', context=context_dict)
 
 # Search in the Internet
 def search(request):

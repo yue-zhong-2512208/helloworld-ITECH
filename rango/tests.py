@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rango.models import Category
 
+# 4 tests are wrote here！
 # Model test
 class CategoryMethodTests(TestCase):
     def test_slug_line_creation(self):

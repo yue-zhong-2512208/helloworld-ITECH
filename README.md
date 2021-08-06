@@ -1,8 +1,17 @@
 # helloworld-ITECH
+This is a web development project for ITECH course work in UofG.
 
-- pip install -U django-registration-redux==2.2
-- pip install requests
-- do not upload bing.key file to keep your API safe
+**Team Name:** Hello World!
+
+**Tutor Name:** Fuxiang Tao
+
+## Team Members
+- A
+- B
+- C
+- D
+
+## About the Website
 
 ## Initialization Step
 - python manage.py makemigrations rango

@@ -8,31 +8,32 @@
 {% block body_block %}
     <div class="jumbotron p-4">
         <div class="container">
-            <h1 class="jumbotron-heading">Search MOVIE LAND</h1>
+            <h1 class="jumbotron-heading">Search the Internet</h1>
+                <div>
+                    <form class="form-inline"
+                        id="user-form"
+                        method="post"
+                        action="{% url 'rango:search' %}">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <input class="form-control"
+                            type="text"
+                            size="50"
+                            name="query"
+                            id="query"
+                            placeholder="Enter keyword here..." />
+                        </div>
+
+                        <button class="btn btn-primary"
+                        type="submit"
+                        name="submit">Search</button>
+                    </form>
+                </div>
         </div>
     </div>
     
-    <div>
-        <form class="form-inline"
-            id="user-form"
-            method="post"
-            action="{% url 'rango:search' %}">
-            {% csrf_token %}
 
-            <div class="form-group">
-                <input class="form-control"
-                type="text"
-                size="50"
-                name="query"
-                id="query"
-                placeholder="Search Movies By Movie Name" />
-            </div>
-
-            <button class="btn btn-primary"
-            type="submit"
-            name="submit">Search</button>
-        </form>
-    </div>
 
     <div>
         {% if result_list %}

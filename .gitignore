@@ -73,6 +73,7 @@ instance/
 
 # migrations
 migrations/
+rango/migrations/
 
 # Sphinx documentation
 docs/_build/

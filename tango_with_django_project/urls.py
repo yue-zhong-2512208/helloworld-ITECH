@@ -26,8 +26,7 @@ app_name = 'rango'
 urlpatterns = [
     path('', views.index, name='index'),
     path('about/', views.about, name='about'),
-    path('category/<slug:category_name_slug>/add_movie/',
-         views.add_movie, name='add_movie'),
+
     path('admin/', admin.site.urls),
     path('rango/', include('rango.urls')), 
     path('accounts/', include('registration.backends.simple.urls')),

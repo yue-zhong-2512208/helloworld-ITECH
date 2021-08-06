@@ -1,0 +1,70 @@
+{% extends 'rango/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {% if movie %}
+        {{ movie.name }}
+    {% else %}
+        Unknown Movie
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+<div>
+    {% if movie %}
+        <div class="col-md-12">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-Info">{{ movie.category.name }}</strong>
+                    <h1 class="mb-0">{{ movie.title }}</h1>
+                    <div class="mb-1 text-muted">{{ movie.year }}</div> </br>
+                    <strong>
+                        Views: {{ movie.views }} </br>
+                        Likes: {{ movie.likes }} </br>
+                    </strong>
+                    <p class="mb-auto"></br>{{ movie.story }}</p>
+                    <a href="{{ movie.url }}">Learn more</a>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <img src="/static/poster/{{ movie.posternum }}.png" width="200" height="250" class="img-fluid" alt="posternum"></img>
+
+                </div>
+            </div>
+        </div>
+    {% else %}
+        The specified movie is not available on MOVIE LAND.
+    {% endif %}
+</div>
+
+<div>
+    {% if user.is_authenticated %}
+        <button id="like_btn"
+            data-movieid="{{ movie.id }}"
+            class="btn btn-success"
+            type="button">
+            <span data-feather="thumbs-up"></span>
+                Like Movie
+        </button>
+        <button type="button" class="btn btn-warning"><a href="{% url 'rango:add_comment' movie.slug %}">Add a Comment</a></button></br>
+    {% endif %}
+
+            {% if comments %}
+                {% for comment in comments %}
+                <div class="shadow p-3 mb-5 bg-body rounded">
+                    <li  class="commentStyle">
+                        <h4>{{ comment.user }}</h4> 
+                        <div class="commentStyleLine">
+                            <p class="commentStyleContent">{{ comment.comments }}</p>
+                            <p class="commentStyleTime">Comment time: {{ comment.time }}</p>
+                        </div>
+                    </li>
+                </div>
+                {% endfor %}
+            {% else %}
+                </br><div class="shadow p-3 mb-5 bg-body rounded">Write the first comment now!</div>
+            {% endif %}
+        
+</div>
+
+
+{% endblock %}

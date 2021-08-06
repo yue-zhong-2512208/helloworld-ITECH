@@ -1,13 +1,12 @@
 from django.contrib.auth.models import User
-from rango.models import UserProfile, Movie, Category, Movie_rating
+from rango.models import UserProfile, Movie, Category, Comment
 from django import forms
+from django.utils import timezone
 
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=Category.NAME_MAX_LENGTH,
                            help_text="Please enter the catergory name.")
-    views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
@@ -17,10 +16,17 @@ class CategoryForm(forms.ModelForm):
 
 class MovieForm(forms.ModelForm):
     title = forms.CharField(max_length=Movie.TITLE_MAX_LENGTH,
-                            help_text="Please enter the title of the page.")
+                            help_text="Please enter the title of your movie.")
     url = forms.URLField(
-        max_length=200, help_text="Please enter the URL of the page.")
-    movie_likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+        max_length=200, help_text="Please enter the URL of your movie.")
+    likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+    poster = forms.ImageField(help_text="Please upload the poster of your movie.", required=False)
+    story = forms.CharField(help_text="Please enter the main story of your movie.")
+    year = forms.IntegerField(
+        help_text="Please enter the production year of your movie.")
+    views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+    posternum = forms.IntegerField(widget=forms.HiddenInput(), initial=50)
+    slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Movie
@@ -48,18 +54,9 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('website', 'picture',)
 
-
 class CommentForm(forms.ModelForm):
-    # check if rate is 0
-    def clean(self):
-        cleaned_data = super(CommentForm, self).clean()
-        score = cleaned_data.get('score')
-        if score == 0:
-            raise forms.ValidationError(message='Rate cannot be 0!')
-        else:
-            return cleaned_data
-
+    comments = forms.CharField(max_length=128, widget=forms.Textarea, help_text="Please ennter the coomment content.")
+    time = forms.DateTimeField(widget=forms.HiddenInput(), initial=timezone.now)
     class Meta:
-        # record score and comment
-        model = Movie_rating
-        fields = ['score', 'comment']
+        model = Comment
+        exclude = ('movie', 'user', )

@@ -14,10 +14,10 @@
     </title>
     
     <!-- Bootstrap core CSS -->
-    <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
     
     <!-- Custom styles for this template -->
-    <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
+    <link href='{% static "css/dashboard.css" %}' rel="stylesheet">
     </head>
     
     <body>
@@ -32,14 +32,16 @@
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"><a class="nav-link" href="{% url 'rango:index' %}">Home</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'rango:about' %}">About</a></li>
-                        <li class="nav-item "><a class="nav-link" href="{% url 'rango:search' %}">Search</a></li>
+                        <li class="nav-item "><a class="nav-link" href="{% url 'rango:all_movies' %}">Library</a></li>
+                        <li class="nav-item "><a class="nav-link" href="{% url 'rango:search_insite' %}">Search This Site</a></li>
+                        <li class="nav-item "><a class="nav-link" href="{% url 'rango:search' %}">Search the Internet</a></li>
                         {% if user.is_authenticated %}
                         <li class="nav-item "><a class="nav-link" href="{% url 'rango:restricted' %}">Restricted</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'rango:add_category' %}">Add Category</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'auth_password_change' %}">Change Password</a></li>
                         {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register Here</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
                         {% endif %}
                     </ul>
@@ -50,7 +52,7 @@
         <div class="container-fluid">
             <div class="row">
                 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                    <div class="sidebar-sticky">
+                    <div class="sidebar-sticky background">
                     {% block sidebar_block %}
                         {% get_category_list category %}
                     {% endblock %}
@@ -70,11 +72,17 @@
             </div>
         </div>
         
+		<!--JavaScript-->
+        <script src="{% static "js/jquery-3.3.1.min.js" %}"  crossorigin="anonymous"></script>
+        <script src="{% static "js/rango-ajax.js" %}" crossorigin="anonymous"></script>
         <!-- Bootstrap core JavaScript -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script>window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.2/assets/js/vendor/jquery-slim.min.js"><\/script>')</script><script src="https://getbootstrap.com/docs/4.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-        <script src="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.js"></script>
+        <script type="text/javascript"> 
+        window.jQuery || document.write('<script src="{% static "js/jquery-slim.min.js" %}"><\/script>') 
+        </script>  
+
+        <script src="{% static "js/bootstrap.bundle.min.js" %}" ></script> 
+        <script src="{% static "js/feather.min.js" %}"></script> 
+        <script src="{% static "js/dashboard.js" %}"></script> 
     </body>
 </html>

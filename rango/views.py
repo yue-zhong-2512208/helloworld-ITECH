@@ -2,15 +2,14 @@
 from datetime import datetime
 from rango.bing_search import run_query
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from rango.models import Category, Movie, User, Movie_rating,  Movie_hot
+from rango.models import Category, Movie, Comment
 from rango.forms import CategoryForm, MovieForm, CommentForm
-from django.contrib import messages
-from django.views.generic import DetailView
 from django.contrib.auth.models import User
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.http import HttpResponse
 
 
 def about(request):
@@ -22,12 +21,12 @@ def about(request):
 
 def index(request):
     # without '-' will sequence from the most to the least
-    category_list = Category.objects.order_by('-likes')[:5]
-    movie_list = Movie.objects.order_by('-movie_likes')[:8]
+    movie_list_byViews = Movie.objects.order_by('-views')[:4]
+    movie_list_byLikes = Movie.objects.order_by('-likes')[:4]
     context_dict = {}
     context_dict['boldmessage'] = 'Enjoy your journey in the world of movies.'
-    context_dict['categories'] = category_list
-    context_dict['movies'] = movie_list
+    context_dict['moviesByViews'] = movie_list_byViews
+    context_dict['moviesByLikes'] = movie_list_byLikes
     visitor_cookie_handler(request)
     response = render(request, 'rango/index.html', context=context_dict)
     return response
@@ -59,13 +58,48 @@ def show_category(request, category_name_slug):
     context_dict = {}
     try:
         category = Category.objects.get(slug=category_name_slug)
-        movies = Movie.objects.filter(category=category)
+        movies = Movie.objects.filter(
+            category=category).order_by('-likes')
         context_dict['movies'] = movies
         context_dict['category'] = category
     except Category.DoesNotExist:
         context_dict['category'] = None
         context_dict['movies'] = None
+	# Start search functionality code.
+    if request.method == 'POST':
+        if request.method == 'POST':
+            query = request.POST['query'].strip()
+
+            if query:
+                context_dict['result_list'] = run_query(query)
+                context_dict['query'] = query
     return render(request, 'rango/category.html', context=context_dict)
+
+
+def show_movie(request, movie_title_slug):
+    context_dict = {}
+    try:
+        movie = Movie.objects.get(slug=movie_title_slug)
+        comments = Comment.objects.filter(movie=movie)
+        context_dict['movie'] = movie
+        context_dict['comments'] = comments
+
+    except Category.DoesNotExist:
+        context_dict['movie'] = None
+        context_dict['comments'] = None
+    
+    # Record views of the page of movies.
+    movie.readpage()
+    movie.save()
+    return render(request, 'rango/movie.html', context=context_dict)
+
+
+def all_movies(request):
+    allMovies = Movie.objects.all().order_by('-views')
+    context_dict = {}
+    context_dict['all_movies'] = allMovies
+
+    return render(request, 'rango/all_movies.html', context=context_dict)
 
 
 @login_required
@@ -80,6 +114,36 @@ def add_category(request):
         else:
             print(form.errors)
     return render(request, 'rango/add_category.html', {'form': form})
+
+
+@login_required
+def add_comment(request, movie_title_slug):
+    try:
+        movie = Movie.objects.get(slug=movie_title_slug)
+    except:
+        movie = None
+
+    if movie is None:
+        return redirect(reverse('rango:index'))
+
+    user = User.objects.get(username=request.user)
+
+    form = CommentForm()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            if movie:
+                comment = form.save(commit=False)
+                comment.movie = movie
+                comment.user = user
+                comment.save()
+                return redirect(reverse('rango:show_movie', kwargs={'movie_title_slug': movie_title_slug}))
+            else:
+                print(form.errors)
+
+    context_dict = {'form': form, 'movie': movie}
+    return render(request, 'rango/add_comment.html', context=context_dict)
 
 
 @login_required
@@ -100,7 +164,6 @@ def add_movie(request, category_name_slug):
             if category:
                 movie = form.save(commit=False)
                 movie.category = category
-                movie.movie_likes = 0
                 movie.save()
                 return redirect(reverse('rango:show_category',
                                         kwargs={'category_name_slug':
@@ -112,106 +175,41 @@ def add_movie(request, category_name_slug):
     return render(request, 'rango/add_movie.html', context=context_dict)
 
 
-# def add_movie(request):
-#     user = User.objects.get(username=request.user)
-#     form = MovieForm()
-
-#     if request.method == 'POST':
-#         form = MovieForm(request.POST)
-#         if form.is_valid():
-#             movie = form.save(commit=False)
-#             movie.user = user
-#             movie.save()
-
-#             return redirect('rango:index')
-#         else:
-#             print(form.errors)
-#     return render(request, 'rango/add_movie.html', {'form': form})
-
-# def register(request):
-#     registered = False
-
-#     if request.method == 'POST':
-#         user_form = UserForm(request.POST)
-#         profile_form = UserProfileForm(request.POST)
-
-#         if user_form.is_valid() and profile_form.is_valid():
-#             user = user_form.save()
-#             user.set_password(user.password)
-#             user.save()
-#             profile = profile_form.save(commit=False)
-#             profile.user = user
-
-#             if 'picture' in request.FILES:
-#                 profile.picture = request.FILES['picture']
-
-#             profile.save()
-
-#             registered = True
-#         else:
-#             print(user_form.errors, profile_form.errors)
-#     else:
-#         user_form = UserForm()
-#         profile_form = UserProfileForm()
-
-#     return render(request, 'rango/register.html',
-#                   context={'user_form': user_form,
-#                            'profile_form': profile_form,
-#                            'registered': registered})
-
-
-# def user_login(request):
-#     if request.method == 'POST':
-#         username = request.POST.get('username')
-#         password = request.POST.get('password')
-#         user = authenticate(username=username, password=password)
-
-#         if user:
-#             if user.is_active:
-#                 login(request, user)
-#                 return redirect(reverse('rango:index'))
-#             else:
-#                 return HttpResponse("Your Rango account is disabled.")
-#         else:
-#             print(f"Invalid login details: {username}, {password}")
-#             return HttpResponse("Invalid login details supplied.")
-
-#     else:
-#         return render(request, 'rango/login.html')
-
-
 @login_required
 def restricted(request):
     return render(request, 'rango/restricted.html')
 
 
-# @login_required
-# def user_logout(request):
-#     logout(request)
-#     return redirect(reverse('rango:index'))
+@login_required
+def add_comment(request, movie_title_slug):
+    try:
+        movie = Movie.objects.get(slug=movie_title_slug)
+    except:
+        movie = None
 
-def get_server_side_cookie(request, cookie, default_val=None):
-    val = request.session.get(cookie)
-    if not val:
-        val = default_val
-    return val
+    if movie is None:
+        return redirect(reverse('rango:index'))
 
+    user = User.objects.get(username=request.user)
 
-def visitor_cookie_handler(request):
-    visits = int(get_server_side_cookie(request, 'visits', '1'))
-    last_visit_cookie = get_server_side_cookie(
-        request, 'last_visit', str(datetime.now()))
-    last_visit_time = datetime.strptime(
-        last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
+    form = CommentForm()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
 
-    if (datetime.now() - last_visit_time).days > 0:
-        visits = visits + 1
-        request.session['last_visit'] = str(datetime.now())
-    else:
-        request.session['last_visit'] = last_visit_cookie
+        if form.is_valid():
+            if movie:
+                comment = form.save(commit=False)
+                comment.movie = movie
+                comment.user = user
+                comment.save()
+                return redirect(reverse('rango:show_movie', kwargs={'movie_title_slug': movie_title_slug}))
+            else:
+                print(form.errors)
 
-    request.session['visits'] = visits
+    context_dict = {'form': form, 'movie': movie}
+    return render(request, 'rango/add_comment.html', context=context_dict)
 
+# Search in the Internet
 def search(request):
     result_list = []
     if request.method == 'POST':
@@ -222,70 +220,32 @@ def search(request):
     return render(request, 'rango/search.html', {'result_list': result_list})
 
 
-class MovieDetailView(DetailView):
-    '''电影详情页面'''
-    model = Movie
-    template_name = 'rango/detail.html'
-    # 上下文对象的名称
-    context_object_name = 'movie'
+# Search inside the website
+def search_insite(request):
+    # this function is for get the movie list
+    movie_list = []
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            movie_list = Movie.objects.filter(title__contains=query)
 
-    @login_required
-    def get_context_data(self, **kwargs):
-        # 重写获取上下文方法，增加评分参数
-        context = super().get_context_data(**kwargs)
+    return render(request, 'rango/search_insite.html', {'movie_list': movie_list})
 
-        # 获得电影的pk
-        pk = self.kwargs['pk']
-        movie = Movie.objects.get(pk=pk)
 
-        # 已经登录，获取当前用户的历史评分数据
-        user = User.objects.get(pk=user_id)
+# this class is for counting likes
+class LikeMovie(View):
+    @method_decorator(login_required())
+    def get(self, request):
+        movie_id = request.GET['movie_id']
 
-        rating = Movie_rating.objects.filter(
-                user=user, movie=movie).first()
-            # 默认值
-        score = 0
-        comment = ''
-        if rating:
-            score = rating.score
-            comment = rating.comment
-        context.update({'score': score, 'comment': comment})
+        try:
+            movie = Movie.objects.get(id=int(movie_id))
+        except Movie.DoesNotExist:
+            return HttpResponse(-1)
+        except ValueError:
+            return HttpResponse(-1)
 
-        return context
+        movie.likes = movie.likes + 1
+        movie.save()
 
-    # 接受评分表单,pk是当前电影的数据库主键id
-    def post(self, request, pk):
-        url = request.get_full_path()
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            # 获取分数和评论
-            score = form.cleaned_data.get('score')
-            comment = form.cleaned_data.get('comment')
-            print(score, comment)
-            # 获取用户和电影
-            user_id = request.session['user_id']
-            user = User.objects.get(pk=user_id)
-            movie = Movie.objects.get(pk=pk)
-
-            # 更新一条记录
-            rating = Movie_rating.objects.filter(
-                user=user, movie=movie).first()
-            if rating:
-                # 如果存在则更新
-                # print(rating)
-                rating.score = score
-                rating.comment = comment
-                rating.save()
-                # messages.info(request,"更新评分成功！")
-            else:
-                print('记录不存在')
-                # 如果不存在则添加
-                rating = Movie_rating(
-                    user=user, movie=movie, score=score, comment=comment)
-                rating.save()
-            messages.info(request, "评论成功!")
-
-        else:
-            # 表单没有验证通过
-            messages.info(request, "评分不能为空!")
-        return redirect(reverse('movie:detail', args=(pk,)))
+        return HttpResponse(movie.likes)

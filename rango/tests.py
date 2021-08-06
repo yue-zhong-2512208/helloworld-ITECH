@@ -2,11 +2,9 @@ from django.test import TestCase
 
 # Create your tests here.
 from django.urls import reverse
-
 from rango.models import Category, Movie
 
 # Model test
-
 class CategoryMethodTests(TestCase):
     def test_slug_line_creation(self):
         """
@@ -19,8 +17,6 @@ class CategoryMethodTests(TestCase):
         self.assertEqual(category.slug, 'random-category-string')
 
 # this function is for test the add category
-
-
 def add_category(name):
     category = Category.objects.get_or_create(name=name)[0]
     category.save()

@@ -87,12 +87,56 @@ def populate():
          'story': 'The truth behind the ascension of Milkha Singh who was scarred because of the India-Pakistan partition.'},
 
         {'title': 'Paan Singh Tomar', 'year': '2012', 'posternum': '19',
-         'url': 'https://www.imdb.com/title/tt1620933/?ref_=adv_li_tt', 'likes': '95', 'views': '758',
+         'url': 'https://www.imdb.com/title/tt1620933/?ref_=adv_li_tt', 'likes': '62', 'views': '758',
          'story': 'The story of Paan Singh Tomar, an Indian athlete and seven-time national steeplechase champion who becomes one of the most feared dacoits in Chambal Valley after his retirement.'},
 
         {'title': 'Chak De! India', 'year': '2007', 'posternum': '20',
          'url': 'https://www.imdb.com/title/tt0871510/?ref_=adv_li_tt', 'likes': '75', 'views': '564',
          'story': 'Kabir Khan, the coach of the Indian Women\'s National Hockey Team, dreams of making his all-girls team emerge victorious against all odds.'},
+    ]
+
+    biography_movies = [
+        {'title': 'Schindler\'s List', 'year': '1993', 'posternum': '21',
+         'url': 'https://www.imdb.com/title/tt0108052/?ref_=adv_li_tt', 'likes': '85', 'views': '765',
+         'story': 'In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.'},
+
+        {'title': 'Goodfellas', 'year': '1990', 'posternum': '22',
+         'url': 'https://www.imdb.com/title/tt0099685/?ref_=adv_li_tt', 'likes': '86', 'views': '867',
+         'story': 'The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners Jimmy Conway and Tommy DeVito in the Italian-American crime syndicate.'},
+
+        {'title': 'Untouchable', 'year': '2011', 'posternum': '23',
+         'url': 'https://www.imdb.com/title/tt1675434/?ref_=adv_li_tt', 'likes': '73', 'views': '945',
+         'story': 'After he becomes a quadriplegic from a paragliding accident, an aristocrat hires a young man from the projects to be his caregiver.'},
+
+        {'title': 'The Pianist', 'year': '2002', 'posternum': '24',
+         'url': 'https://www.imdb.com/title/tt0253474/?ref_=adv_li_tt', 'likes': '76', 'views': '657',
+         'story': 'A Polish Jewish musician struggles to survive the destruction of the Warsaw ghetto of World War II.'},
+
+        {'title': 'Braveheart', 'year': '1995', 'posternum': '25',
+         'url': 'https://www.imdb.com/title/tt0112573/?ref_=adv_li_tt', 'likes': '56', 'views': '846',
+         'story': 'Scottish warrior William Wallace leads his countrymen in a rebellion to free his homeland from the tyranny of King Edward I of England.'},
+    ]
+
+    mystery_movies = [
+        {'title': 'Spirited Away', 'year': '2001', 'posternum': '26',
+         'url': 'https://www.imdb.com/title/tt0245429/?ref_=adv_li_tt', 'likes': '97', 'views': '574',
+         'story': 'During her family\'s move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.'},
+
+        {'title': 'The Green Mile', 'year': '1999', 'posternum': '27',
+         'url': 'https://www.imdb.com/title/tt0120689/?ref_=adv_li_tt', 'likes': '65', 'views': '856',
+         'story': 'The lives of guards on Death Row are affected by one of their charges: a black man accused of child murder and rape, yet who has a mysterious gift.'},
+
+        {'title': 'Seven', 'year': '1995', 'posternum': '28',
+         'url': 'https://www.imdb.com/title/tt0114369/?ref_=adv_li_tt', 'likes': '56', 'views': '567',
+         'story': 'Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.'},
+
+        {'title': 'Harakiri', 'year': '1962', 'posternum': '29',
+         'url': 'https://www.imdb.com/title/tt0056058/?ref_=adv_li_tt', 'likes': '86', 'views': '357',
+         'story': 'When a ronin requesting seppuku at a feudal lord\'s palace is told of the brutal suicide of another ronin who previously visited, he reveals how their pasts are intertwined - and in doing so challenges the clan\'s integrity.'},
+
+        {'title': 'Raatchasan', 'year': '2018', 'posternum': '30',
+         'url': 'https://www.imdb.com/title/tt7060344/?ref_=adv_li_tt', 'likes': '45', 'views': '546',
+         'story': 'A sub-inspector sets out in pursuit of a mysterious serial killer who targets teen school girls and murders them brutally.'},
     ]
         
     cats = {
@@ -100,6 +144,8 @@ def populate():
         'Musical': {'movies': musical_movies},
         'Romance': {'movies': romance_movies},
         'Sport': {'movies': sport_movies},
+        'Biography': {'movies': biography_movies},
+        'Mystery': {'movies': mystery_movies},
         }
 
     for cat, cat_data in cats.items():  

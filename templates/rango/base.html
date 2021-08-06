@@ -32,6 +32,8 @@
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"><a class="nav-link" href="{% url 'rango:index' %}">Home</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'rango:about' %}">About</a></li>
+                        <li class="nav-item "><a class="nav-link" href="{% url 'rango:all_movies' %}">Library</a></li>
+                        <li class="nav-item "><a class="nav-link" href="{% url 'rango:search_insite' %}">Search This Site</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'rango:search' %}">Search the Internet</a></li>
                         {% if user.is_authenticated %}
                         <li class="nav-item "><a class="nav-link" href="{% url 'rango:restricted' %}">Restricted</a></li>
@@ -39,7 +41,7 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'rango:add_category' %}">Add Category</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'auth_password_change' %}">Change Password</a></li>
                         {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register Here</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
                         {% endif %}
                     </ul>
@@ -70,11 +72,15 @@
             </div>
         </div>
         
+		<!--JavaScript-->
+        <script src="{% static "js/jquery-3.3.1.min.js" %}"  crossorigin="anonymous"></script>
+        <script src="{% static "js/rango-ajax.js" %}" crossorigin="anonymous"></script>
         <!-- Bootstrap core JavaScript -->
         <!-- Placed at the end of the document so the pages load faster -->
         <script type="text/javascript"> 
         window.jQuery || document.write('<script src="{% static "js/jquery-slim.min.js" %}"><\/script>') 
         </script>  
+
         <script src="{% static "js/bootstrap.bundle.min.js" %}" ></script> 
         <script src="{% static "js/feather.min.js" %}"></script> 
         <script src="{% static "js/dashboard.js" %}"></script> 

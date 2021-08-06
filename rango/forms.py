@@ -19,13 +19,13 @@ class MovieForm(forms.ModelForm):
                             help_text="Please enter the title of your movie.")
     url = forms.URLField(
         max_length=200, help_text="Please enter the URL of your movie.")
-    movie_likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+    likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     poster = forms.ImageField(help_text="Please upload the poster of your movie.", required=False)
     story = forms.CharField(help_text="Please enter the main story of your movie.")
     year = forms.IntegerField(
         help_text="Please enter the production year of your movie.")
     views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    movieid = forms.IntegerField(widget=forms.HiddenInput(), initial=50)
+    posternum = forms.IntegerField(widget=forms.HiddenInput(), initial=50)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:

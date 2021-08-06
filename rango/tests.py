@@ -21,11 +21,8 @@ class CategoryMethodTests(TestCase):
 # this function is for test the add category
 
 
-def add_category(name, views=0, likes=0):
+def add_category(name):
     category = Category.objects.get_or_create(name=name)[0]
-    category.views = views
-    category.likes = likes
-
     category.save()
     return category
 

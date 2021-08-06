@@ -22,7 +22,7 @@ def about(request):
 def index(request):
     # without '-' will sequence from the most to the least
     movie_list_byViews = Movie.objects.order_by('-views')[:4]
-    movie_list_byLikes = Movie.objects.order_by('-movie_likes')[:4]
+    movie_list_byLikes = Movie.objects.order_by('-likes')[:4]
     context_dict = {}
     context_dict['boldmessage'] = 'Enjoy your journey in the world of movies.'
     context_dict['moviesByViews'] = movie_list_byViews
@@ -59,7 +59,7 @@ def show_category(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
         movies = Movie.objects.filter(
-            category=category).order_by('-movie_likes')
+            category=category).order_by('-likes')
         context_dict['movies'] = movies
         context_dict['category'] = category
     except Category.DoesNotExist:
@@ -93,11 +93,11 @@ def show_movie(request, movie_title_slug):
 
 
 def all_movies(request):
-    allArticles = Article.objects.all().order_by('-views')
+    allMovies = Movie.objects.all().order_by('-views')
     context_dict = {}
     context_dict['all_movies'] = allMovies
 
-    return render(request, 'coffquiz/all_movies.html', context=context_dict)
+    return render(request, 'rango/all_movies.html', context=context_dict)
 
 
 @login_required
@@ -225,28 +225,31 @@ def add_comment(request, movie_title_slug):
     context_dict = {'form': form, 'movie': movie}
     return render(request, 'rango/add_comment.html', context=context_dict)
 
-# this class is for searching in this website
+# Search in the Internet
+def search(request):
+    result_list = []
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            # Run our Bing function to get the results list!
+            result_list = run_query(query)
+    return render(request, 'rango/search.html', {'result_list': result_list})
 
 
-def sidebar_search(max_results=0, starts_with=''):
+# Search inside the website
+def search_insite(request):
     # this function is for get the movie list
     movie_list = []
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            movie_list = Movie.objects.filter(title__contains=query)
 
-    if starts_with:
-        movie_list = Movie.objects.filter(name__istartswith=starts_with)
-
-    print(movie_list)
-
-    # if max_results is 0, all result will be returned
-    if max_results > 0:
-        if len(movie_list) > max_results:
-            movie_list = movie_list[:max_results]
-
-    return movie_list
+    return render(request, 'rango/search_insite.html', {'movie_list': movie_list})
 
 
-# this class is for counting movie_likes
-class LikeCategoryView(View):
+# this class is for counting likes
+class LikeMovie(View):
     @method_decorator(login_required())
     def get(self, request):
         movie_id = request.GET['movie_id']
@@ -258,7 +261,7 @@ class LikeCategoryView(View):
         except ValueError:
             return HttpResponse(-1)
 
-        movie.movie_likes = movie.movie_likes + 1
+        movie.likes = movie.likes + 1
         movie.save()
 
-        return HttpResponse(movie.movie_likes)
+        return HttpResponse(movie.likes)

@@ -10,6 +10,11 @@
 {% endblock %}
 
 {% block body_block %}
+    <div class="jumbotron p-4"> 
+        <div class="container"> 
+            <h1 class="jumbotron-heading">Add a Comment to {{ movie.title }}</h1>
+        </div> 
+    </div>
     <form id="add_comment_form" method="post" action="{% url 'rango:add_comment' movie.slug %}">
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}
@@ -21,6 +26,8 @@
             {{ field.help_text }}
             {{ field }}
         {% endfor %}
-        <input type="submit" name="submit" value="Add Comment">
+<br />
+        <button class="btn btn-primary" type="submit" name="submit">Add Comment</button> 
+
     </form>
 {% endblock %}

@@ -28,14 +28,14 @@ class Movie(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=TITLE_MAX_LENGTH)
     url = models.URLField()
-    movie_likes = models.IntegerField(default=0)
+    likes = models.IntegerField(default=0)
     poster = models.ImageField(
         upload_to='poster', blank=True)
     year = models.IntegerField(default=2021)
     story = models.CharField(max_length=STORY_MAX_LENGTH)
     views = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)
-    movieid = models.IntegerField(default=0)
+    posternum = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
